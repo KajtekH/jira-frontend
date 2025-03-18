@@ -2,14 +2,12 @@ import {CdkScrollable} from '@angular/cdk/overlay';
 
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, TemplateRef} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {FocusableGridDirective} from '@fundamental-ngx/cdk/utils';
 import {BarModule} from '@fundamental-ngx/core/bar';
 import {BusyIndicatorComponent} from '@fundamental-ngx/core/busy-indicator';
 import {ButtonComponent} from '@fundamental-ngx/core/button';
 import {DialogModule, DialogService} from '@fundamental-ngx/core/dialog';
 import {FormControlComponent, FormItemComponent, FormLabelComponent} from '@fundamental-ngx/core/form';
 import {InputGroupModule} from '@fundamental-ngx/core/input-group';
-import {ScrollbarDirective} from '@fundamental-ngx/core/scrollbar';
 import {TableModule} from '@fundamental-ngx/core/table';
 import {TitleComponent} from '@fundamental-ngx/core/title';
 import {ToolbarComponent, ToolbarItemDirective, ToolbarSpacerDirective} from '@fundamental-ngx/core/toolbar';
