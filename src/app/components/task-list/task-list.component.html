@@ -40,19 +40,27 @@
     </tr>
     </thead>
     <tbody fd-table-body>
-      @for (row of displayedRows; track row) {
+      @for (i of createRange(); track i) {
         <tr fd-table-row>
           <td fd-table-cell>
-            <app-task></app-task>
+            @if (todoList[i]) {
+              <app-task ></app-task>
+            }
           </td>
           <td fd-table-cell>
-            <app-task></app-task>
+            @if (progressList[i]) {
+              <app-task ></app-task>
+            }
           </td>
           <td fd-table-cell>
-            <app-task></app-task>
+            @if (testingList[i]) {
+              <app-task [task]="taskData"></app-task>
+            }
           </td>
           <td fd-table-cell>
-            <app-task></app-task>
+            @if (doneList[i]) {
+              <app-task ></app-task>
+            }
           </td>
         </tr>
       }

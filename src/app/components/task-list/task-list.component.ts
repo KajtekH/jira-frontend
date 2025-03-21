@@ -12,6 +12,7 @@ import {TableModule} from '@fundamental-ngx/core/table';
 import {TitleComponent} from '@fundamental-ngx/core/title';
 import {ToolbarComponent, ToolbarItemDirective, ToolbarSpacerDirective} from '@fundamental-ngx/core/toolbar';
 import {TaskComponent} from "../task/task.component";
+import {TaskInterface} from "../../models/task.interface";
 
 @Component({
   selector: 'app-task-list',
@@ -40,6 +41,11 @@ import {TaskComponent} from "../task/task.component";
 })
 export class TaskListComponent implements OnInit {
   tableRows: any[] = [];
+  todoList: any[] = [];
+  progressList: any[] = [];
+  testingList: any[] = [];
+  doneList: any[] = [];
+  taskData: TaskInterface = { Name: 'Dupa', Description: 'Dupa blada', Status: 'fikumiku' };
   displayedRows: any[] = [];
   searchTerm = '';
   confirmationReason: string = '';
@@ -55,6 +61,32 @@ export class TaskListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.todoList = [
+      {
+      },
+      {
+      }
+    ];
+    this.progressList = [
+      {
+      }
+    ];
+    this.testingList = [
+      {
+      }
+    ];
+    this.doneList = [
+      {
+      },
+      {
+      },
+      {
+      },
+      {
+      },
+      {
+      }
+    ];
     this.tableRows = [
       {
         column1: this.task,
@@ -75,11 +107,6 @@ export class TaskListComponent implements OnInit {
         column1: 'Kiwi',
         column2: 'Fruit',
         region: 'New Zealand'
-      },
-      {
-        column1: 'Spinach',
-        column2: 'Vegetable',
-        region: 'California'
       }
     ];
     this.displayedRows = this.tableRows;
@@ -128,6 +155,20 @@ export class TaskListComponent implements OnInit {
         this.confirmationReason = 'Dialog dismissed with result: ' + error;
         this._cdr.detectChanges();
       }
+    );
+  }
+
+  createRange(): number[] {
+    // return new Array(number);
+    return [0,1,2,3,4];
+  }
+
+  get maxLength(): number {
+    return Math.max(
+      this.todoList.length,
+      this.progressList.length,
+      this.testingList.length,
+      this.doneList.length
     );
   }
 }
