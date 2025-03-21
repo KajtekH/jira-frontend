@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, input} from '@angular/core';
 import { AvatarComponent, ButtonComponent, TextComponent } from '@fundamental-ngx/core';
 import { CardModule } from '@fundamental-ngx/core/card';
+import {TaskInterface} from "../../models/task.interface";
 
 
 @Component({
@@ -12,5 +13,5 @@ import { CardModule } from '@fundamental-ngx/core/card';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskComponent {
-
+  @Input() task: TaskInterface | undefined;
 }

@@ -2,9 +2,9 @@
   <fd-card-header>
     <fd-card-main-header>
       <fd-avatar glyph="travel-expense" size="s" ariaLabel="avatar image" title="avatar image"></fd-avatar>
-      <h2 fd-card-title>Travel Request</h2>
-      <h3 fd-card-subtitle>Marie Johnson</h3>
-      <span fd-card-counter>2 hours ago</span>
+      <h2 fd-card-title>{{task?.Name}}</h2>
+      <h3 fd-card-subtitle>{{task?.Description}}</h3>
+      <span fd-card-counter>{{task?.Status}}</span>
       <button
         fd-button
         fd-card-header-action
