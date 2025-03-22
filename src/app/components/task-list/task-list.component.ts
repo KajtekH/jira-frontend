@@ -3,6 +3,7 @@ import {CdkScrollable} from '@angular/cdk/overlay';
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, TemplateRef} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BarModule} from '@fundamental-ngx/core/bar';
+import { DragAndDropModule, FdDropEvent } from '@fundamental-ngx/cdk/utils';
 import {BusyIndicatorComponent} from '@fundamental-ngx/core/busy-indicator';
 import {ButtonComponent} from '@fundamental-ngx/core/button';
 import {DialogModule, DialogService} from '@fundamental-ngx/core/dialog';
@@ -13,6 +14,17 @@ import {TitleComponent} from '@fundamental-ngx/core/title';
 import {ToolbarComponent, ToolbarItemDirective, ToolbarSpacerDirective} from '@fundamental-ngx/core/toolbar';
 import {TaskComponent} from "../task/task.component";
 import {TaskInterface} from "../../models/task.interface";
+import {
+  CdkDrag,
+  CdkDragDrop,
+  CdkDragEnd,
+  CdkDragStart,
+  CdkDropList,
+  CdkDropListGroup,
+
+  transferArrayItem
+} from "@angular/cdk/drag-drop";
+import {ListComponent} from "@fundamental-ngx/core";
 
 @Component({
   selector: 'app-task-list',
@@ -21,13 +33,12 @@ import {TaskInterface} from "../../models/task.interface";
   styleUrls: ['./task-list.component.scss'],
   standalone: true,
   imports: [
+    DragAndDropModule,
     ToolbarComponent,
     TitleComponent,
     ToolbarSpacerDirective,
     InputGroupModule,
     FormsModule,
-    ButtonComponent,
-    ToolbarItemDirective,
     BusyIndicatorComponent,
     TableModule,
     DialogModule,
@@ -36,139 +47,71 @@ import {TaskInterface} from "../../models/task.interface";
     FormLabelComponent,
     FormControlComponent,
     BarModule,
-    TaskComponent
+    TaskComponent,
+    CdkDrag,
+    CdkDropList,
+    CdkDropListGroup,
+    ListComponent,
   ]
 })
 export class TaskListComponent implements OnInit {
-  tableRows: any[] = [];
-  todoList: any[] = [];
-  progressList: any[] = [];
-  testingList: any[] = [];
+  tableRows: TaskInterface[] = [];
+  todoList: TaskInterface[] = [];
+  progressList: TaskInterface[] = [];
+  testingList: TaskInterface[] = [];
   doneList: any[] = [];
-  taskData: TaskInterface = { Name: 'Dupa', Description: 'Dupa blada', Status: 'fikumiku' };
-  displayedRows: any[] = [];
   searchTerm = '';
-  confirmationReason: string = '';
-  myForm: FormGroup = new FormGroup({});
-  loading = false;
-  task = new TaskComponent();
 
-  constructor(
-    private _dialogService: DialogService,
-    private _fb: FormBuilder,
-    private _cdr: ChangeDetectorRef
-  ) {
-  }
 
   ngOnInit(): void {
     this.todoList = [
       {
+        Id: 1, Name: 'Task 1', Description: 'Description 1', CreatedAt: '2021-01-01', UpdatedAt: '2021-01-01', Type: 'Type 1', Status: 'Status 1'
       },
       {
+        Id: 2, Name: 'Task 2', Description: 'Description 2', CreatedAt: '2021-01-01', UpdatedAt: '2021-01-01', Type: 'Type 2', Status: 'Status 2'
+      },
+      {
+        Id: 3, Name: 'Task 3', Description: 'Description 3', CreatedAt: '2021-01-01', UpdatedAt: '2021-01-01', Type: 'Type 3', Status: 'Status 3'
+      },
+      {
+        Id: 4, Name: 'Task 4', Description: 'Description 4', CreatedAt: '2021-01-01', UpdatedAt: '2021-01-01', Type: 'Type 4', Status: 'Status 4'
+      },
+      {
+        Id: 5, Name: 'Task 5', Description: 'Description 5', CreatedAt: '2021-01-01', UpdatedAt: '2021-01-01', Type: 'Type 5', Status: 'Status 5'
       }
     ];
     this.progressList = [
-      {
-      }
     ];
     this.testingList = [
       {
+        Id: 6, Name: 'Task 6', Description: 'Description 6', CreatedAt: '2021-01-01', UpdatedAt: '2021-01-01', Type: 'Type 6', Status: 'Status 6'
       }
     ];
     this.doneList = [
-      {
-      },
-      {
-      },
-      {
-      },
-      {
-      },
-      {
-      }
     ];
-    this.tableRows = [
-      {
-        column1: this.task,
-        column2: 'Fruit',
-        region: 'Virginia'
-      },
-      {
-        column1: 'Banana',
-        column2: 'Fruit',
-        region: 'Costa Rica'
-      },
-      {
-        column1: 'Kale',
-        column2: 'Vegetable',
-        region: 'Colorado'
-      },
-      {
-        column1: 'Kiwi',
-        column2: 'Fruit',
-        region: 'New Zealand'
-      }
-    ];
-    this.displayedRows = this.tableRows;
-
-    this.myForm = this._fb.group({
-      nameInput: new FormControl(''),
-      typeInput: new FormControl(''),
-      regionInput: new FormControl('')
-    });
   }
 
-  searchInputChanged(event: string): void {
-    const filterRows = (row: { [x: string]: string; }): boolean => {
-      const keys = Object.keys(row);
-      return !!keys.find((key) => row[key].toLowerCase().includes(event.toLowerCase()));
-    };
 
-    if (event) {
-      this.displayedRows = this.tableRows.filter((row) => filterRows(row));
-    } else {
-      this.displayedRows = this.tableRows;
+  drop(event: CdkDragDrop<any[]>): void {
+    if (event.previousContainer === event.container) {
+      return;
     }
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+    }
+
+  onDragStart(event: CdkDragStart): void {
+    const lists = document.querySelectorAll('ul');
+    lists.forEach(list => list.classList.add('dragging'));
   }
 
-  resetSearch(): void {
-    this.displayedRows = this.tableRows;
-    this.searchTerm = '';
-  }
-
-  openDialog(dialog: TemplateRef<any>): void {
-    const dialogRef = this._dialogService.open(dialog, {responsivePadding: true});
-
-    dialogRef.afterClosed.subscribe(
-      (result) => {
-        this.confirmationReason = 'Dialog closed with result: ' + result;
-        this.tableRows.push({
-          column1: this.myForm.get('nameInput')?.value,
-          column2: this.myForm.get('typeInput')?.value,
-          region: this.myForm.get('regionInput')?.value
-        });
-        this.searchInputChanged(this.searchTerm);
-        this.myForm.setValue({nameInput: '', typeInput: '', regionInput: ''});
-        this._cdr.detectChanges();
-      },
-      (error) => {
-        this.confirmationReason = 'Dialog dismissed with result: ' + error;
-        this._cdr.detectChanges();
-      }
-    );
-  }
-
-  createRange(): number[] {
-    // return new Array(number);
-    return [0,1,2,3,4];
-  }
-
-  get maxLength(): number {
-    return Math.max(
-      this.todoList.length,
-      this.progressList.length,
-      this.testingList.length,
-      this.doneList.length
-    );
+  onDragEnd(event: CdkDragEnd): void {
+    const lists = document.querySelectorAll('ul');
+    lists.forEach(list => list.classList.remove('dragging'));
   }
 }
