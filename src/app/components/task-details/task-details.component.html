@@ -1,1 +1,37 @@
-<p>task-details works!</p>
+<fd-dynamic-page [autoResponsive]="false" ariaLabel="Example Dynamic Page">
+  <fd-dynamic-page-header title="{{TaskData?.name}}">
+    <fd-dynamic-page-layout-actions>
+      <fd-toolbar fdType="transparent" [clearBorder]="true">
+          <button
+            fd-button
+            fdType="transparent"
+            aria-label="Close"
+            (click)="changeLayout()"
+            title="Close"
+          >
+            <i class="sap-icon--decline"></i>
+          </button>
+      </fd-toolbar>
+    </fd-dynamic-page-layout-actions>
+  </fd-dynamic-page-header>
+  <fd-dynamic-page-subheader [collapsible]="false" [pinnable]="false" [collapsed]="false">
+                            <span>
+                                {{TaskData?.type}}
+                            </span>
+  </fd-dynamic-page-subheader>
+  <fd-dynamic-page-content cdkScrollable>
+    <div
+      class="fd-dynamic-page-section-example"
+      [ngStyle]="{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }"
+    >
+    </div>
+    <div class="fd-dynamic-page-section-example">
+      {{TaskData?.description}}
+    </div>
+  </fd-dynamic-page-content>
+
+</fd-dynamic-page>

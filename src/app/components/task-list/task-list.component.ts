@@ -1,13 +1,16 @@
-import {CdkScrollable} from '@angular/cdk/overlay';
 
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, TemplateRef} from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnInit, TemplateRef,
+  ViewChild
+} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BarModule} from '@fundamental-ngx/core/bar';
-import { DragAndDropModule, FdDropEvent } from '@fundamental-ngx/cdk/utils';
+import { DragAndDropModule } from '@fundamental-ngx/cdk/utils';
 import {BusyIndicatorComponent} from '@fundamental-ngx/core/busy-indicator';
-import {ButtonComponent} from '@fundamental-ngx/core/button';
 import {DialogModule, DialogService} from '@fundamental-ngx/core/dialog';
-import {FormControlComponent, FormItemComponent, FormLabelComponent} from '@fundamental-ngx/core/form';
 import {InputGroupModule} from '@fundamental-ngx/core/input-group';
 import {TableModule} from '@fundamental-ngx/core/table';
 import {TitleComponent} from '@fundamental-ngx/core/title';
@@ -24,7 +27,21 @@ import {
 
   transferArrayItem
 } from "@angular/cdk/drag-drop";
-import {ListComponent} from "@fundamental-ngx/core";
+import {
+  FlexibleColumnLayout,
+  FlexibleColumnLayoutComponent,
+  ListComponent,
+  FlexibleColumnLayoutModule,
+  ButtonComponent,
+  FormItemComponent,
+  FormLabelComponent,
+  FormControlComponent
+} from "@fundamental-ngx/core";
+import {TaskDetailsComponent} from "../task-details/task-details.component";
+import {TaskService} from "../../services/task.service";
+import {TaskRequest} from "../../models/taskRequest.interface";
+import {NgIf} from "@angular/common";
+import {forkJoin} from "rxjs";
 
 @Component({
   selector: 'app-task-list',
@@ -36,60 +53,76 @@ import {ListComponent} from "@fundamental-ngx/core";
     DragAndDropModule,
     ToolbarComponent,
     TitleComponent,
-    ToolbarSpacerDirective,
     InputGroupModule,
     FormsModule,
     BusyIndicatorComponent,
     TableModule,
     DialogModule,
     ReactiveFormsModule,
-    FormItemComponent,
-    FormLabelComponent,
-    FormControlComponent,
     BarModule,
     TaskComponent,
     CdkDrag,
     CdkDropList,
     CdkDropListGroup,
     ListComponent,
+    FlexibleColumnLayoutComponent,
+    FlexibleColumnLayoutModule,
+    TaskDetailsComponent,
+    ToolbarSpacerDirective,
+    ButtonComponent,
+    ToolbarItemDirective,
+    FormItemComponent,
+    FormLabelComponent,
+    FormControlComponent,
+    NgIf,
   ]
 })
 export class TaskListComponent implements OnInit {
-  tableRows: TaskInterface[] = [];
   todoList: TaskInterface[] = [];
-  progressList: TaskInterface[] = [];
-  testingList: TaskInterface[] = [];
-  doneList: any[] = [];
-  searchTerm = '';
+  progressList: TaskInterface[]  = [];
+  testingList: TaskInterface[]  = [];
+  doneList: TaskInterface[]  = [];
+  selectedTask: TaskInterface | undefined;
 
+  localLayout: FlexibleColumnLayout = 'OneColumnStartFullScreen';
+  showMidColumnControls = this.localLayout.startsWith('Two') || this.localLayout.includes('FullScreen');
+  isFullScreen = this.localLayout.includes('FullScreen');
+  @ViewChild('overlay')
+  overlay: ElementRef<HTMLElement> | undefined;
+  private confirmationReason: string = '';
+  myForm!: FormGroup;
+  isLoading = true;
 
-  ngOnInit(): void {
-    this.todoList = [
-      {
-        Id: 1, Name: 'Task 1', Description: 'Description 1', CreatedAt: '2021-01-01', UpdatedAt: '2021-01-01', Type: 'Type 1', Status: 'Status 1'
-      },
-      {
-        Id: 2, Name: 'Task 2', Description: 'Description 2', CreatedAt: '2021-01-01', UpdatedAt: '2021-01-01', Type: 'Type 2', Status: 'Status 2'
-      },
-      {
-        Id: 3, Name: 'Task 3', Description: 'Description 3', CreatedAt: '2021-01-01', UpdatedAt: '2021-01-01', Type: 'Type 3', Status: 'Status 3'
-      },
-      {
-        Id: 4, Name: 'Task 4', Description: 'Description 4', CreatedAt: '2021-01-01', UpdatedAt: '2021-01-01', Type: 'Type 4', Status: 'Status 4'
-      },
-      {
-        Id: 5, Name: 'Task 5', Description: 'Description 5', CreatedAt: '2021-01-01', UpdatedAt: '2021-01-01', Type: 'Type 5', Status: 'Status 5'
-      }
-    ];
-    this.progressList = [
-    ];
-    this.testingList = [
-      {
-        Id: 6, Name: 'Task 6', Description: 'Description 6', CreatedAt: '2021-01-01', UpdatedAt: '2021-01-01', Type: 'Type 6', Status: 'Status 6'
-      }
-    ];
-    this.doneList = [
-    ];
+  constructor(private taskService: TaskService,
+    private _dialogService: DialogService,
+    private _fb: FormBuilder,
+    private _cdr: ChangeDetectorRef) {}
+
+  ngOnInit(): void  {
+    this.fetchData();
+
+    this.myForm = this._fb.group({
+      nameInput: new FormControl(''),
+      descriptionInput: new FormControl(''),
+      typeInput: new FormControl(''),
+      assigneeInput: new FormControl('')
+    });
+  }
+
+  fetchData(): void {
+    forkJoin({
+      todo: this.taskService.getTasksByStatus('TO_DO'),
+      progress: this.taskService.getTasksByStatus('IN_PROGRESS'),
+      testing: this.taskService.getTasksByStatus('TESTING'),
+      done: this.taskService.getTasksByStatus('DONE')
+    }).subscribe(({ todo, progress, testing, done }) => {
+      this.todoList = todo;
+      this.progressList = progress;
+      this.testingList = testing;
+      this.doneList = done;
+      this.isLoading = false;
+      this._cdr.detectChanges();
+    });
   }
 
 
@@ -98,20 +131,58 @@ export class TaskListComponent implements OnInit {
       return;
     }
       transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
+        event.previousContainer.data!,
+        event.container.data!,
+        event.previousIndex!,
+        event.currentIndex!
       );
     }
 
-  onDragStart(event: CdkDragStart): void {
+  onDragStart(): void {
     const lists = document.querySelectorAll('ul');
     lists.forEach(list => list.classList.add('dragging'));
   }
 
-  onDragEnd(event: CdkDragEnd): void {
+  onDragEnd(): void {
     const lists = document.querySelectorAll('ul');
     lists.forEach(list => list.classList.remove('dragging'));
+  }
+
+
+
+  changeLayout(newValue: FlexibleColumnLayout, task: TaskInterface) {
+    this.localLayout = newValue;
+    this.showMidColumnControls = this.localLayout.startsWith('Two') || this.localLayout.includes('FullScreen');
+    this.isFullScreen = this.localLayout.includes('FullScreen');
+    this.selectedTask = task;
+  }
+
+
+  onLayoutChange(): void {
+    this.changeLayout('OneColumnStartFullScreen', this.selectedTask!);
+  }
+
+  openDialog(dialog: TemplateRef<any>): void {
+    const dialogRef = this._dialogService.open(dialog, { responsivePadding: false, resizable: true });
+
+    dialogRef.afterClosed.subscribe((result) => {
+      this._cdr.detectChanges();
+      const taskRequest: TaskRequest = {
+        name: this.myForm.value.nameInput,
+        description: this.myForm.value.descriptionInput,
+        assignee: this.myForm.value.assigneeInput,
+        type: this.myForm.value.typeInput
+      };
+      console.log(taskRequest);
+      this.taskService.addTask(taskRequest).subscribe((task) => {
+        this.isLoading = true;
+        this._cdr.detectChanges();
+        console.log(task);
+        this.fetchData();
+      });
+    }, (error) => {
+      this.confirmationReason = 'Dialog dismissed with result: ' + error;
+      this._cdr.detectChanges();
+    });
   }
 }
