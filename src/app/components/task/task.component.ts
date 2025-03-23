@@ -15,4 +15,19 @@ import {CdkDrag} from "@angular/cdk/drag-drop";
 })
 export class TaskComponent {
   @Input() task: TaskInterface | undefined;
+
+  protected getTypeIcon(): string {
+    if (this.task?.type === 'BUG') {
+      return 'wrench';
+    } else if (this.task?.type === 'FEATURE') {
+      return 'lead';
+    } else if (this.task?.type === 'IMPROVEMENT') {
+      return 'trend-up';
+    } else if (this.task?.type === 'QUALITY') {
+      return 'ai';
+    }
+    else {
+      return '';
+    }
+  }
 }

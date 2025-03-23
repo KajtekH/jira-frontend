@@ -1,38 +1,25 @@
 <fd-card [interactive]="false" role="listitem" style="max-width: 400px">
   <fd-card-header>
     <fd-card-main-header>
-      <fd-avatar glyph="travel-expense" size="s" ariaLabel="avatar image" title="avatar image"></fd-avatar>
-      <h2 fd-card-title>{{task?.Name}}</h2>
-      <h3 fd-card-subtitle>{{task?.Description}}</h3>
-      <span fd-card-counter>{{task?.Status}}</span>
-      <button
-        fd-button
-        fd-card-header-action
-        fdType="transparent"
-        glyph="overflow"
-        ariaLabel="More"
-        title="More"
-      ></button>
+      <fd-avatar glyph="{{this.getTypeIcon()}}" size="s" ariaLabel="avatar image" title="{{this.task?.type}}"></fd-avatar>
+      <h1 style="font-size: 1.2rem" fd-card-title>{{task?.name}}</h1>
+      <span fd-card-counter>{{task?.type}}</span>
     </fd-card-main-header>
     <fd-card-extended-header [align]="'bottom'">
       <div fd-card-header-column>
         <div fd-card-header-row>
-          <fd-text text="Created at: {{task?.CreatedAt}}"></fd-text>
+          <fd-text text="Created at: {{task?.createdAt}}"></fd-text>
         </div>
         <div fd-card-header-row>
-          <fd-text text="Updated at: {{task?.UpdatedAt}}"></fd-text>
+          <fd-text text="Updated at: {{task?.updatedAt}}"></fd-text>
         </div>
       </div>
       <div fd-card-header-column [align]="'right'">
         <div fd-card-header-row>
-          <span style="font-size: 1.4rem">{{task?.Type}}</span>
+          <span style="font-size: 1.0rem">{{task?.assignee}}</span>
         </div>
       </div>
     </fd-card-extended-header>
   </fd-card-header>
-  <fd-card-footer>
-    <button *fdCardFooterActionItem fd-button fdType="positive">Approve</button>
-    <button *fdCardFooterActionItem fd-button fdType="negative">Reject</button>
-  </fd-card-footer>
 </fd-card>
 

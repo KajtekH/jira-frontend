@@ -1,44 +1,127 @@
-<fd-toolbar aria-label="With Toolbar" fdType="transparent" [clearBorder]="true">
-  <h4 fd-title>NAZWA ISSUE</h4>
+<div *ngIf="!todoList || !progressList || !testingList || !doneList">
+  Loading...
+</div>
+<fd-flexible-column-layout [(layout)]="localLayout" *ngIf="todoList && progressList && testingList && doneList">
+  <ng-template #startColumn>
+    <div>
+    <fd-toolbar aria-label="With Toolbar" fdType="transparent" [clearBorder]="true">
+      <h4 fd-title>NAZWA ISSUE</h4>
+      <fd-toolbar-spacer></fd-toolbar-spacer>
+        <button
+          fd-toolbar-item
+          fd-button
+          label="New Task"
+          (click)="openDialog(newItemDialog)"
+          fdType="transparent"
+          glyph="add"
+        ></button>
+    </fd-toolbar>
+    <fd-busy-indicator [loading]="isLoading" [block]="true" size="l">
+      <div class="table-container" cdkDropListGroup>
+        <div class="column">
+          <h2>To Do</h2>
+          <ul fd-list cdkDropList [cdkDropListData]="todoList" (cdkDropListDropped)="drop($event)">
+            @for (task of todoList; track $index) {
+              <app-task [task]="task" cdkDrag (cdkDragStarted)="onDragStart()"
+                        (cdkDragEnded)="onDragEnd()" (click)="changeLayout('TwoColumnsStartExpanded', task)"></app-task>
+            }
+          </ul>
+        </div>
 
-</fd-toolbar>
-<fd-busy-indicator  [block]="true" size="l">
-  <div class="table-container" cdkDropListGroup>
-    <div class="column">
-      <h2>To Do</h2>
-      <ul fd-list cdkDropList [cdkDropListData]="todoList" (cdkDropListDropped)="drop($event)">
-        @for(task of todoList; track task){
-          <app-task [task]="task" cdkDrag (cdkDragStarted)="onDragStart($event)" (cdkDragEnded)="onDragEnd($event)"></app-task>
-          }
-      </ul>
+        <div class="column">
+          <h2>In Progress</h2>
+          <ul fd-list cdkDropList [cdkDropListData]="progressList" (cdkDropListDropped)="drop($event)">
+            @for (task of progressList; track $index) {
+              <app-task [task]="task" cdkDrag (cdkDragStarted)="onDragStart()"
+                        (cdkDragEnded)="onDragEnd()" (click)="changeLayout('TwoColumnsStartExpanded', task)"></app-task>
+            }
+          </ul>
+        </div>
+
+        <div class="column">
+          <h2>Testing</h2>
+          <ul fd-list cdkDropList [cdkDropListData]="testingList" (cdkDropListDropped)="drop($event)">
+            @for (task of testingList; track $index) {
+              <app-task [task]="task" cdkDrag (cdkDragStarted)="onDragStart()"
+                        (cdkDragEnded)="onDragEnd()" (click)="changeLayout('TwoColumnsStartExpanded', task)"></app-task>
+            }
+          </ul>
+        </div>
+
+        <div class="column">
+          <h2>Done</h2>
+          <ul fd-list cdkDropList [cdkDropListData]="doneList" (cdkDropListDropped)="drop($event)">
+            @for (task of doneList; track $index) {
+              <app-task [task]="task" cdkDrag (cdkDragStarted)="onDragStart()"
+                        (cdkDragEnded)="onDragEnd()" (click)="changeLayout('TwoColumnsStartExpanded', task)"></app-task>
+            }
+          </ul>
+        </div>
+      </div>
+    </fd-busy-indicator>
     </div>
+  </ng-template>
+  <ng-template #midColumn>
+    <app-task-details
+      [TaskData]="selectedTask"
+      (closeTaskDetails) = "onLayoutChange()"></app-task-details>
+  </ng-template>
+  <ng-template [fdDialogTemplate] let-dialog let-dialogConfig="dialogConfig" #newItemDialog cdkDrag [cdkDragDisabled] = "true">
+    <fd-dialog [dialogConfig]="dialogConfig" [dialogRef]="dialog">
+      <fd-dialog-header>
+        <h1 fd-title>New Item</h1>
+        <button fd-dialog-close-button (click)="dialog.dismiss('Close button')"></button>
+      </fd-dialog-header>
+      <fd-dialog-body>
+        <form [formGroup]="myForm">
+          <div fd-form-set>
+            <div fd-form-item>
+              <label fd-form-label for="input-1">Name</label>
+              <input
+                fd-form-control
+                formControlName="nameInput"
+                type="text"
+                id="input-1"
+                autocomplete="off"
+              />
+            </div>
+            <div class="fd-row fd-form-item">
+              <div class="fd-col">
+                <label class="fd-form-label" for="text-2434-name">Description:</label>
+              </div>
+              <div class="fd-col">
+                <textarea class="fd-textarea" id="text-2434-name" formControlName="descriptionInput">textarea</textarea>
+              </div>
+            </div>
+            <div fd-form-item>
+              <label fd-form-label for="input-3">Type</label>
+              <input
+                fd-form-control
+                formControlName="typeInput"
+                type="text"
+                id="input-3"
+                autocomplete="off"
+              />
+            </div>
+            <div fd-form-item>
+              <label fd-form-label for="input-4">Assignee</label>
+              <input
+                fd-form-control
+                formControlName="assigneeInput"
+                type="text"
+                id="input-4"
+                autocomplete="off"
+              />
+            </div>
 
-    <div class="column">
-      <h2>In Progress</h2>
-      <ul fd-list cdkDropList [cdkDropListData]="progressList" (cdkDropListDropped)="drop($event)">
-       @for(task of progressList; track task){
-          <app-task [task]="task" cdkDrag (cdkDragStarted)="onDragStart($event)" (cdkDragEnded)="onDragEnd($event)"></app-task>
-       }
-      </ul>
-    </div>
-
-    <div class="column">
-      <h2>Testing</h2>
-      <ul fd-list cdkDropList [cdkDropListData]="testingList" (cdkDropListDropped)="drop($event)">
-        @for(task of testingList; track task){
-          <app-task [task]="task" cdkDrag (cdkDragStarted)="onDragStart($event)" (cdkDragEnded)="onDragEnd($event)"></app-task>
-        }
-      </ul>
-    </div>
-
-    <div class="column">
-      <h2>Done</h2>
-      <ul fd-list cdkDropList [cdkDropListData]="doneList" (cdkDropListDropped)="drop($event)">
-        @for(task of doneList; track task){
-          <app-task [task]="task" cdkDrag (cdkDragStarted)="onDragStart($event)" (cdkDragEnded)="onDragEnd($event)"></app-task>
-        }
-      </ul>
-    </div>
-  </div>
-</fd-busy-indicator>
-
+          </div>
+        </form>
+      </fd-dialog-body>
+      <fd-dialog-footer>
+        <fd-button-bar fdType="emphasized" label="Save" type="submit" (click)="dialog.close('Save')">
+        </fd-button-bar>
+        <fd-button-bar label="Cancel" (click)="dialog.dismiss('Cancel')"> </fd-button-bar>
+      </fd-dialog-footer>
+    </fd-dialog>
+  </ng-template>
+</fd-flexible-column-layout>
