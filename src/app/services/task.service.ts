@@ -3,6 +3,8 @@ import {HttpClient} from "@angular/common/http";
 import {lastValueFrom, Observable} from "rxjs";
 import {TaskInterface} from "../models/task.interface";
 import {TaskRequest} from "../models/taskRequest.interface";
+import {MoveTaskRequest} from "../models/moveTaskRequest.interface";
+
 
 @Injectable({
   providedIn: 'root'
@@ -19,5 +21,9 @@ export class TaskService {
 
   addTask(taskRequest: TaskRequest): Observable<TaskInterface> {
     return this.http.post<TaskInterface>(this.baseUrl, taskRequest);
+  }
+
+  moveTask(request: MoveTaskRequest): Observable<any> {
+    return this.http.patch<any>(`${this.baseUrl}`, request);
   }
 }

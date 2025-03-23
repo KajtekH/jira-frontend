@@ -17,6 +17,7 @@ import {TitleComponent} from '@fundamental-ngx/core/title';
 import {ToolbarComponent, ToolbarItemDirective, ToolbarSpacerDirective} from '@fundamental-ngx/core/toolbar';
 import {TaskComponent} from "../task/task.component";
 import {TaskInterface} from "../../models/task.interface";
+import {MoveTaskRequest} from "../../models/moveTaskRequest.interface";
 import {
   CdkDrag,
   CdkDragDrop,
@@ -130,12 +131,16 @@ export class TaskListComponent implements OnInit {
     if (event.previousContainer === event.container) {
       return;
     }
-      transferArrayItem(
-        event.previousContainer.data!,
-        event.container.data!,
-        event.previousIndex!,
-        event.currentIndex!
-      );
+    const status = this.determineUpdateStatus(event.container.id);
+    console.log(status);
+    const task = event.item.data as TaskInterface;
+    this.moveTask(task.id, status);
+      // transferArrayItem(
+      //   event.previousContainer.data!,
+      //   event.container.data!,
+      //   event.previousIndex!,
+      //   event.currentIndex!
+      // );
     }
 
   onDragStart(): void {
@@ -143,12 +148,37 @@ export class TaskListComponent implements OnInit {
     lists.forEach(list => list.classList.add('dragging'));
   }
 
-  onDragEnd(): void {
+  onDragEnd(event: CdkDragEnd): void {
     const lists = document.querySelectorAll('ul');
     lists.forEach(list => list.classList.remove('dragging'));
+
+  //  const task = event.source.data as TaskInterface;
+  //  console.log(task);
+  //  const status = this.determineUpdateStatus(event.event.srcElement!);
+  //  console.log(status);
+  //  this.moveTask(task, status);
   }
 
+  determineUpdateStatus(id: string): "TO_DO" | "IN_PROGRESS" | "TESTING" | "DONE" {
+    if (id === "cdk-drop-list-0") {
+      return "TO_DO";
+    } else if (id === "cdk-drop-list-1") {
+      return "IN_PROGRESS";
+    } else if (id === "cdk-drop-list-2") {
+      return "TESTING";
+    } else if (id === "cdk-drop-list-3") {
+      return "DONE";
+    }
+    return "TO_DO";
+  }
 
+  moveTask(id: number, newStatus:  "TO_DO" | "IN_PROGRESS" | "TESTING" | "DONE"): void {
+    const taskReq: MoveTaskRequest = {taskId: id, status: newStatus};
+    console.log(taskReq);
+    this.taskService.moveTask(taskReq).subscribe(() => {
+      this.fetchData();
+    });
+  }
 
   changeLayout(newValue: FlexibleColumnLayout, task: TaskInterface) {
     this.localLayout = newValue;
@@ -175,9 +205,6 @@ export class TaskListComponent implements OnInit {
       };
       console.log(taskRequest);
       this.taskService.addTask(taskRequest).subscribe((task) => {
-        this.isLoading = true;
-        this._cdr.detectChanges();
-        console.log(task);
         this.fetchData();
       });
     }, (error) => {

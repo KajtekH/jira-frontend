@@ -22,8 +22,8 @@
           <h2>To Do</h2>
           <ul fd-list cdkDropList [cdkDropListData]="todoList" (cdkDropListDropped)="drop($event)">
             @for (task of todoList; track $index) {
-              <app-task [task]="task" cdkDrag (cdkDragStarted)="onDragStart()"
-                        (cdkDragEnded)="onDragEnd()" (click)="changeLayout('TwoColumnsStartExpanded', task)"></app-task>
+              <app-task [task]="task" cdkDrag (cdkDragStarted)="onDragStart()" [cdkDragData]="task"
+                        (cdkDragEnded)="onDragEnd($event)" (click)="changeLayout('TwoColumnsStartExpanded', task)"></app-task>
             }
           </ul>
         </div>
@@ -32,8 +32,8 @@
           <h2>In Progress</h2>
           <ul fd-list cdkDropList [cdkDropListData]="progressList" (cdkDropListDropped)="drop($event)">
             @for (task of progressList; track $index) {
-              <app-task [task]="task" cdkDrag (cdkDragStarted)="onDragStart()"
-                        (cdkDragEnded)="onDragEnd()" (click)="changeLayout('TwoColumnsStartExpanded', task)"></app-task>
+              <app-task [task]="task" cdkDrag (cdkDragStarted)="onDragStart()" [cdkDragData]="task"
+                        (cdkDragEnded)="onDragEnd($event)" (click)="changeLayout('TwoColumnsStartExpanded', task)"></app-task>
             }
           </ul>
         </div>
@@ -42,8 +42,8 @@
           <h2>Testing</h2>
           <ul fd-list cdkDropList [cdkDropListData]="testingList" (cdkDropListDropped)="drop($event)">
             @for (task of testingList; track $index) {
-              <app-task [task]="task" cdkDrag (cdkDragStarted)="onDragStart()"
-                        (cdkDragEnded)="onDragEnd()" (click)="changeLayout('TwoColumnsStartExpanded', task)"></app-task>
+              <app-task [task]="task" cdkDrag (cdkDragStarted)="onDragStart()" [cdkDragData]="task"
+                        (cdkDragEnded)="onDragEnd($event)" (click)="changeLayout('TwoColumnsStartExpanded', task)"></app-task>
             }
           </ul>
         </div>
@@ -52,8 +52,8 @@
           <h2>Done</h2>
           <ul fd-list cdkDropList [cdkDropListData]="doneList" (cdkDropListDropped)="drop($event)">
             @for (task of doneList; track $index) {
-              <app-task [task]="task" cdkDrag (cdkDragStarted)="onDragStart()"
-                        (cdkDragEnded)="onDragEnd()" (click)="changeLayout('TwoColumnsStartExpanded', task)"></app-task>
+              <app-task [task]="task" cdkDrag (cdkDragStarted)="onDragStart()" [cdkDragData]="task"
+                        (cdkDragEnded)="onDragEnd($event)" (click)="changeLayout('TwoColumnsStartExpanded', task)"></app-task>
             }
           </ul>
         </div>
