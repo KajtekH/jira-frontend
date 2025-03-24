@@ -173,7 +173,7 @@ export class TaskListComponent implements OnInit {
   }
 
   moveTask(id: number, newStatus:  "TO_DO" | "IN_PROGRESS" | "TESTING" | "DONE"): void {
-    const taskReq: MoveTaskRequest = {taskId: id, status: newStatus};
+    const taskReq: MoveTaskRequest = {taskId: id, taskStatus: newStatus};
     console.log(taskReq);
     this.taskService.moveTask(taskReq).subscribe(() => {
       this.fetchData();
