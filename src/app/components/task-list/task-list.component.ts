@@ -79,6 +79,7 @@ import {forkJoin} from "rxjs";
   ]
 })
 export class TaskListComponent implements OnInit {
+  issueId: number = 1;
   todoList: TaskInterface[] = [];
   progressList: TaskInterface[]  = [];
   testingList: TaskInterface[]  = [];
@@ -90,7 +91,6 @@ export class TaskListComponent implements OnInit {
   isFullScreen = this.localLayout.includes('FullScreen');
   @ViewChild('overlay')
   overlay: ElementRef<HTMLElement> | undefined;
-  private confirmationReason: string = '';
   myForm!: FormGroup;
   isLoading = true;
 
@@ -204,11 +204,10 @@ export class TaskListComponent implements OnInit {
         type: this.myForm.value.typeInput
       };
       console.log(taskRequest);
-      this.taskService.addTask(taskRequest).subscribe((task) => {
+      this.taskService.addTask(taskRequest, this.issueId).subscribe((task) => {
         this.fetchData();
       });
     }, (error) => {
-      this.confirmationReason = 'Dialog dismissed with result: ' + error;
       this._cdr.detectChanges();
     });
   }
