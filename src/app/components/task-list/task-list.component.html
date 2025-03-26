@@ -1,12 +1,12 @@
 <div *ngIf="!todoList || !progressList || !testingList || !doneList">
   Loading...
 </div>
-<fd-flexible-column-layout [(layout)]="localLayout" *ngIf="todoList && progressList && testingList && doneList">
+<fd-flexible-column-layout [(layout)]="localLayout">
   <ng-template #startColumn>
     <div>
-    <fd-toolbar aria-label="With Toolbar" fdType="transparent" [clearBorder]="true">
-      <h4 fd-title>NAZWA ISSUE</h4>
-      <fd-toolbar-spacer></fd-toolbar-spacer>
+      <fd-toolbar aria-label="With Toolbar" fdType="transparent" [clearBorder]="true">
+        <h4 fd-title>NAZWA ISSUE</h4>
+        <fd-toolbar-spacer></fd-toolbar-spacer>
         <button
           fd-toolbar-item
           fd-button
@@ -27,7 +27,6 @@
             }
           </ul>
         </div>
-
         <div class="column">
           <h2>In Progress</h2>
           <ul fd-list cdkDropList [cdkDropListData]="progressList" (cdkDropListDropped)="drop($event)">
@@ -37,7 +36,6 @@
             }
           </ul>
         </div>
-
         <div class="column">
           <h2>Testing</h2>
           <ul fd-list cdkDropList [cdkDropListData]="testingList" (cdkDropListDropped)="drop($event)">
@@ -47,7 +45,6 @@
             }
           </ul>
         </div>
-
         <div class="column">
           <h2>Done</h2>
           <ul fd-list cdkDropList [cdkDropListData]="doneList" (cdkDropListDropped)="drop($event)">
@@ -64,9 +61,10 @@
   <ng-template #midColumn>
     <app-task-details
       [TaskData]="selectedTask"
-      (closeTaskDetails) = "onLayoutChange()"></app-task-details>
+      (closeTaskDetails)="onLayoutChange()"></app-task-details>
   </ng-template>
-  <ng-template [fdDialogTemplate] let-dialog let-dialogConfig="dialogConfig" #newItemDialog cdkDrag [cdkDragDisabled] = "true">
+  <ng-template [fdDialogTemplate] let-dialog let-dialogConfig="dialogConfig" #newItemDialog cdkDrag
+               [cdkDragDisabled]="true">
     <fd-dialog [dialogConfig]="dialogConfig" [dialogRef]="dialog">
       <fd-dialog-header>
         <h1 fd-title>New Item</h1>
@@ -89,8 +87,9 @@
               <div class="fd-col">
                 <label class="fd-form-label" for="text-2434-name">Description:</label>
               </div>
-              <div class="fd-col">
-                <textarea class="fd-textarea" id="text-2434-name" formControlName="descriptionInput">textarea</textarea>
+              <div class="fd-col inner">
+                <textarea class="fd-textarea" id="text-2434-name"
+                          formControlName="descriptionInput">textarea</textarea>
               </div>
             </div>
             <div fd-form-item>
@@ -120,7 +119,7 @@
       <fd-dialog-footer>
         <fd-button-bar fdType="emphasized" label="Save" type="submit" (click)="dialog.close('Save')">
         </fd-button-bar>
-        <fd-button-bar label="Cancel" (click)="dialog.dismiss('Cancel')"> </fd-button-bar>
+        <fd-button-bar label="Cancel" (click)="dialog.dismiss('Cancel')"></fd-button-bar>
       </fd-dialog-footer>
     </fd-dialog>
   </ng-template>

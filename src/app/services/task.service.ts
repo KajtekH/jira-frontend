@@ -19,8 +19,8 @@ export class TaskService {
     return this.http.get<TaskInterface[]>(`${this.baseUrl}/${status}`);
   }
 
-  addTask(taskRequest: TaskRequest): Observable<TaskInterface> {
-    return this.http.post<TaskInterface>(this.baseUrl, taskRequest);
+  addTask(taskRequest: TaskRequest, issueId: number): Observable<TaskInterface> {
+    return this.http.post<TaskInterface>(`${this.baseUrl}/${issueId}`, taskRequest);
   }
 
   moveTask(request: MoveTaskRequest): Observable<any> {
