@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {lastValueFrom, Observable} from "rxjs";
-import {TaskInterface} from "../models/task.interface";
-import {TaskRequest} from "../models/taskRequest.interface";
-import {MoveTaskRequest} from "../models/moveTaskRequest.interface";
+import {TaskInterface} from "../../models/task.interface";
+import {TaskRequest} from "../../models/taskRequest.interface";
+import {MoveTaskRequest} from "../../models/moveTaskRequest.interface";
 
 
 @Injectable({
@@ -15,8 +15,8 @@ export class TaskService {
 
   constructor(private http: HttpClient) { }
 
-  getTasksByStatus(status: string): Observable<TaskInterface[]> {
-    return this.http.get<TaskInterface[]>(`${this.baseUrl}/${status}`);
+  getTasksByStatus(issueId: number, status: string): Observable<TaskInterface[]> {
+    return this.http.get<TaskInterface[]>(`${this.baseUrl}/${issueId}/${status}`);
   }
 
   addTask(taskRequest: TaskRequest, issueId: number): Observable<TaskInterface> {
