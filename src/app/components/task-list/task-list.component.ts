@@ -39,10 +39,11 @@ import {
   FormControlComponent
 } from "@fundamental-ngx/core";
 import {TaskDetailsComponent} from "../task-details/task-details.component";
-import {TaskService} from "../../services/task.service";
+import {TaskService} from "../../services/task-services/task.service";
 import {TaskRequest} from "../../models/taskRequest.interface";
 import {NgIf} from "@angular/common";
 import {forkJoin} from "rxjs";
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-task-list',
@@ -97,9 +98,12 @@ export class TaskListComponent implements OnInit {
   constructor(private taskService: TaskService,
     private _dialogService: DialogService,
     private _fb: FormBuilder,
-    private _cdr: ChangeDetectorRef) {}
+    private _cdr: ChangeDetectorRef,private route: ActivatedRoute) {}
 
   ngOnInit(): void  {
+    this.route.params.subscribe(params => {
+      this.issueId = params['id'];
+    });
     this.fetchData();
 
     this.myForm = this._fb.group({
@@ -112,10 +116,10 @@ export class TaskListComponent implements OnInit {
 
   fetchData(): void {
     forkJoin({
-      todo: this.taskService.getTasksByStatus('TO_DO'),
-      progress: this.taskService.getTasksByStatus('IN_PROGRESS'),
-      testing: this.taskService.getTasksByStatus('TESTING'),
-      done: this.taskService.getTasksByStatus('DONE')
+      todo: this.taskService.getTasksByStatus(this.issueId, 'TO_DO'),
+      progress: this.taskService.getTasksByStatus(this.issueId, 'IN_PROGRESS'),
+      testing: this.taskService.getTasksByStatus(this.issueId, 'TESTING'),
+      done: this.taskService.getTasksByStatus(this.issueId, 'DONE')
     }).subscribe(({ todo, progress, testing, done }) => {
       this.todoList = todo;
       this.progressList = progress;
