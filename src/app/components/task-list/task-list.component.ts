@@ -16,8 +16,8 @@ import {TableModule} from '@fundamental-ngx/core/table';
 import {TitleComponent} from '@fundamental-ngx/core/title';
 import {ToolbarComponent, ToolbarItemDirective, ToolbarSpacerDirective} from '@fundamental-ngx/core/toolbar';
 import {TaskComponent} from "../task/task.component";
-import {TaskInterface} from "../../models/task.interface";
-import {MoveTaskRequest} from "../../models/moveTaskRequest.interface";
+import {TaskInterface} from "../../models/task/task.interface";
+import {MoveTaskRequest} from "../../models/task/moveTaskRequest.interface";
 import {
   CdkDrag,
   CdkDragDrop,
@@ -40,10 +40,11 @@ import {
 } from "@fundamental-ngx/core";
 import {TaskDetailsComponent} from "../task-details/task-details.component";
 import {TaskService} from "../../services/task-services/task.service";
-import {TaskRequest} from "../../models/taskRequest.interface";
+import {TaskRequest} from "../../models/task/taskRequest.interface";
 import {NgIf} from "@angular/common";
 import {forkJoin} from "rxjs";
 import { ActivatedRoute } from '@angular/router';
+import {IssueService} from "../../services/issue-services/issue.service";
 
 @Component({
   selector: 'app-task-list',
@@ -81,6 +82,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class TaskListComponent implements OnInit {
   issueId: number = 1;
+  issueName: string = '';
   todoList: TaskInterface[] = [];
   progressList: TaskInterface[]  = [];
   testingList: TaskInterface[]  = [];
@@ -96,6 +98,7 @@ export class TaskListComponent implements OnInit {
   isLoading = true;
 
   constructor(private taskService: TaskService,
+    private issueService: IssueService,
     private _dialogService: DialogService,
     private _fb: FormBuilder,
     private _cdr: ChangeDetectorRef,private route: ActivatedRoute) {}
@@ -116,11 +119,13 @@ export class TaskListComponent implements OnInit {
 
   fetchData(): void {
     forkJoin({
+      issue: this.issueService.getIssueById(this.issueId),
       todo: this.taskService.getTasksByStatus(this.issueId, 'TO_DO'),
       progress: this.taskService.getTasksByStatus(this.issueId, 'IN_PROGRESS'),
       testing: this.taskService.getTasksByStatus(this.issueId, 'TESTING'),
       done: this.taskService.getTasksByStatus(this.issueId, 'DONE')
-    }).subscribe(({ todo, progress, testing, done }) => {
+    }).subscribe(({issue, todo, progress, testing, done }) => {
+      this.issueName = issue.name;
       this.todoList = todo;
       this.progressList = progress;
       this.testingList = testing;
@@ -136,6 +141,7 @@ export class TaskListComponent implements OnInit {
       return;
     }
     const status = this.determineUpdateStatus(event.container.id);
+    console.log(event.container.id);
     console.log(status);
     const task = event.item.data as TaskInterface;
     this.moveTask(task.id, status);
@@ -164,13 +170,14 @@ export class TaskListComponent implements OnInit {
   }
 
   determineUpdateStatus(id: string): "TO_DO" | "IN_PROGRESS" | "TESTING" | "DONE" {
-    if (id === "cdk-drop-list-0") {
+    const numericId = parseInt(id.split('-').pop()!, 10);
+    if (numericId % 4 === 0) {
       return "TO_DO";
-    } else if (id === "cdk-drop-list-1") {
+    } else if (numericId % 4 === 1) {
       return "IN_PROGRESS";
-    } else if (id === "cdk-drop-list-2") {
+    } else if (numericId % 4 === 2) {
       return "TESTING";
-    } else if (id === "cdk-drop-list-3") {
+    } else if (numericId % 4 === 3) {
       return "DONE";
     }
     return "TO_DO";

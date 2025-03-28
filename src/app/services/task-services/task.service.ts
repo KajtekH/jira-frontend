@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {lastValueFrom, Observable} from "rxjs";
-import {TaskInterface} from "../../models/task.interface";
-import {TaskRequest} from "../../models/taskRequest.interface";
-import {MoveTaskRequest} from "../../models/moveTaskRequest.interface";
+import {TaskInterface} from "../../models/task/task.interface";
+import {TaskRequest} from "../../models/task/taskRequest.interface";
+import {MoveTaskRequest} from "../../models/task/moveTaskRequest.interface";
 
 
 @Injectable({
