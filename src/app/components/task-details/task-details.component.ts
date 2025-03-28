@@ -10,7 +10,7 @@ import {
 } from "@fundamental-ngx/core";
 import {CdkScrollable} from "@angular/cdk/scrolling";
 import {NgStyle} from "@angular/common";
-import {TaskInterface} from "../../models/task.interface";
+import {TaskInterface} from "../../models/task/task.interface";
 
 @Component({
   selector: 'app-task-details',
