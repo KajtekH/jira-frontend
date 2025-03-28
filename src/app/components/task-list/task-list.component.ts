@@ -101,7 +101,7 @@ export class TaskListComponent implements OnInit {
     private issueService: IssueService,
     private _dialogService: DialogService,
     private _fb: FormBuilder,
-    private _cdr: ChangeDetectorRef,private route: ActivatedRoute) {}
+    private _cdr: ChangeDetectorRef, private route: ActivatedRoute) {}
 
   ngOnInit(): void  {
     this.route.params.subscribe(params => {
@@ -145,12 +145,6 @@ export class TaskListComponent implements OnInit {
     console.log(status);
     const task = event.item.data as TaskInterface;
     this.moveTask(task.id, status);
-      // transferArrayItem(
-      //   event.previousContainer.data!,
-      //   event.container.data!,
-      //   event.previousIndex!,
-      //   event.currentIndex!
-      // );
     }
 
   onDragStart(): void {
@@ -161,12 +155,6 @@ export class TaskListComponent implements OnInit {
   onDragEnd(event: CdkDragEnd): void {
     const lists = document.querySelectorAll('ul');
     lists.forEach(list => list.classList.remove('dragging'));
-
-  //  const task = event.source.data as TaskInterface;
-  //  console.log(task);
-  //  const status = this.determineUpdateStatus(event.event.srcElement!);
-  //  console.log(status);
-  //  this.moveTask(task, status);
   }
 
   determineUpdateStatus(id: string): "TO_DO" | "IN_PROGRESS" | "TESTING" | "DONE" {
@@ -212,7 +200,7 @@ export class TaskListComponent implements OnInit {
         name: this.myForm.value.nameInput,
         description: this.myForm.value.descriptionInput,
         assignee: this.myForm.value.assigneeInput,
-        type: this.myForm.value.typeInput
+        taskType: this.myForm.value.typeInput
       };
       console.log(taskRequest);
       this.taskService.addTask(taskRequest, this.issueId).subscribe((task) => {
