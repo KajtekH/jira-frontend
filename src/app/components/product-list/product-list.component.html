@@ -1,5 +1,5 @@
 <fd-toolbar>
-  <label fd-toolbar-label> Issues for request: {{this.requestName}} </label>
+  <label fd-toolbar-label> Products: </label>
   <fd-toolbar-spacer></fd-toolbar-spacer>
   <fd-input-group
     glyph="decline"
@@ -13,39 +13,34 @@
   >
   </fd-input-group>
   <button
-    ariaLabel="Add issue"
-    label="Add Issue"
-    title="Add issue"
+    ariaLabel="Add Product"
+    label="Add product"
+    title="Add product"
     fd-button
     glyph="add"
-    (click)="addIssue(newIssueDialog)"
+    (click)="addProduct(newIssueDialog)"
   ></button>
 </fd-toolbar>
 <div>
-<span></span>
+  <span></span>
 </div>
 <ul fd-list [byline]="true" [unreadIndicator]="true">
-  @for (issue of displayedIssues; track $index) {
-  <li fd-list-item [unread]="true" aria-description="unread" class="{{issue.status}}" (click)="navigateToTaskList(issue.id)">
-    <span fd-list-thumbnail><fd-icon glyph="task"></fd-icon></span>
-    <div fd-list-content class="{{issue.status}}">
-      <div fd-list-title>{{issue.name}}</div>
-      <div fd-list-footer class="{{issue.status}}">{{issue.productManager}}</div>
-      <div fd-list-byline [twoCol]="true">
-        @if(issue.closeDate){
-        <div fd-list-byline-left>Opened: {{issue.openDate}}  Closed:  {{issue.closeDate}}</div>
-        }
-        @else{
-          <div fd-list-byline-left>Opened: {{issue.openDate}}</div>
-        }
-        <div fd-list-byline-right>{{issue.doneTasksCount}}/{{issue.tasksCount}}</div>
+  @for (product of displayedProducts; track $index) {
+    <li fd-list-item [unread]="true" aria-description="unread" (click)="navigateToRequestList(product.id)">
+      <span fd-list-thumbnail><fd-icon glyph="product"></fd-icon></span>
+      <div fd-list-content>
+        <div fd-list-title>{{product.name}}</div>
+        <div fd-list-footer>{{product.owner}}</div>
+        <div fd-list-byline [twoCol]="true">
+          @if(product.releaseDate){
+            <div fd-list-byline-left>Version: {{product.version}}    Released:  {{product.releaseDate}}</div>
+          }
+          @else{
+            <div fd-list-byline-left>Version: {{product.version}}</div>
+          }
+        </div>
       </div>
-    </div>
-    @if(issue.status === 'OPEN'){
-    <button fd-button fdType="transparent" glyph="accept" (click)="closeIssue(issue.id); $event.stopPropagation()" title="close"></button>
-    <button fd-button fdType="transparent" glyph="sys-cancel-2" (click)="abandonIssue(issue.id); $event.stopPropagation()" title="abandon"></button>
-    }
-  </li>
+    </li>
   }
 </ul>
 <ng-template [fdDialogTemplate] let-dialog let-dialogConfig="dialogConfig" #newIssueDialog>
@@ -77,12 +72,12 @@
             </div>
           </div>
           <div fd-form-item>
-            <label fd-form-label for="input-4">Product Manager</label>
+            <label fd-form-label for="input-5">Account Manager</label>
             <input
               fd-form-control
-              formControlName="productManagerInput"
+              formControlName="ownerInput"
               type="text"
-              id="input-4"
+              id="input-5"
               autocomplete="off"
             />
           </div>
