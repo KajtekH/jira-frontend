@@ -30,9 +30,10 @@ import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} f
 import {RequestInterface} from "../../models/request/request.interface";
 import {DialogService} from "@fundamental-ngx/core/dialog";
 import {RequestService} from "../../services/request-services/request.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {IssueRequestInterface} from "../../models/issue/issueRequest.interface";
 import {RequestRequestInterface} from "../../models/request/requestRequest.interface";
+import {ProductService} from "../../services/product-services/product.service";
 
 @Component({
   selector: 'app-request-list',
@@ -80,14 +81,19 @@ export class RequestListComponent implements OnInit, OnChanges{
 
   constructor(private router: Router,
               private requestService: RequestService,
+              private productService: ProductService,
               private _fb: FormBuilder,
               private _cdr: ChangeDetectorRef,
-              private _dialogService: DialogService) {
+              private _dialogService: DialogService,
+              private route: ActivatedRoute) {
 
 
   }
 
   ngOnInit(): void {
+    this.route.params.subscribe((params) => {
+      this.productId = params['id'];
+    });
     this.fetchData();
     this.handleSearchTermChange('');
     this.myForm = this._fb.group({
@@ -103,11 +109,13 @@ export class RequestListComponent implements OnInit, OnChanges{
   }
 
   private fetchData() {
-    this.requestService.getRequests().subscribe(requests => {
+    this.requestService.getRequests(this.productId).subscribe(requests => {
       this.Requests = requests;
       this.displayedRequests = requests;
     });
-
+    this.productService.getProductById(this.productId).subscribe(product => {
+      this.productName = product.name;
+    });
   }
 
   protected handleSearchTermChange(searchTerm: string) {
@@ -129,7 +137,7 @@ export class RequestListComponent implements OnInit, OnChanges{
         accountManager: this.myForm.value.accountManagerInput,
       };
       console.log(requestRequest);
-      this.requestService.addRequest(requestRequest).subscribe((request) => {
+      this.requestService.addRequest(requestRequest, this.productId).subscribe((request) => {
         this.fetchData();
         this._cdr.detectChanges();
       });

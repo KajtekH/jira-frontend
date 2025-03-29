@@ -13,16 +13,16 @@ export class RequestService {
 
   constructor(private http: HttpClient) { }
 
-  getRequests(): Observable<RequestInterface[]> {
-    return this.http.get<RequestInterface[]>(`${this.baseUrl}`);
+  getRequests(productId: number): Observable<RequestInterface[]> {
+    return this.http.get<RequestInterface[]>(`${this.baseUrl}/${productId}`);
   }
 
   getRequestById(requestId: number): Observable<RequestInterface> {
     return this.http.get<RequestInterface>(`${this.baseUrl}/request/${requestId}`, {});
   }
 
-  addRequest(requestRequest: RequestRequestInterface): Observable<RequestInterface> {
-    return this.http.post<RequestInterface>(this.baseUrl, requestRequest);
+  addRequest(requestRequest: RequestRequestInterface, productId: number): Observable<RequestInterface> {
+    return this.http.post<RequestInterface>(`${this.baseUrl}/${productId}`, requestRequest);
   }
 
   closeRequest(requestId: number): Observable<any> {
