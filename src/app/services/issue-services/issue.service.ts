@@ -13,23 +13,23 @@ export class IssueService {
   constructor(private http: HttpClient) { }
 
   getIssues(requestId: number): Observable<IssueInterface[]> {
-    return this.http.get<IssueInterface[]>(`${this.baseUrl}/${requestId}`);
+    return this.http.get<IssueInterface[]>(`${this.baseUrl}/${requestId}`, {withCredentials: true});
   }
 
   getIssueById(issueId: number): Observable<IssueInterface> {
-    return this.http.get<IssueInterface>(`${this.baseUrl}/${issueId}`);
+    return this.http.get<IssueInterface>(`${this.baseUrl}/${issueId}`, {withCredentials: true});
   }
 
   abandonIssue(issueId: number): Observable<any> {
-    return this.http.patch(`${this.baseUrl}/${issueId}/ABANDONED`, {});
+    return this.http.patch(`${this.baseUrl}/${issueId}/ABANDONED`,{}, {withCredentials: true});
   }
 
   closeIssue(issueId: number): Observable<any> {
-    return this.http.patch(`${this.baseUrl}/${issueId}/CLOSED`, {});
+    return this.http.patch(`${this.baseUrl}/${issueId}/CLOSED`,{}, {withCredentials: true});
   }
 
   addIssue(issue: IssueRequestInterface, requestId: number): Observable<IssueInterface> {
-    return this.http.post<IssueInterface>(`${this.baseUrl}/${requestId}`, issue);
+    return this.http.post<IssueInterface>(`${this.baseUrl}/${requestId}`, issue, {withCredentials: true});
   }
 
 }

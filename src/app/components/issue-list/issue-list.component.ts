@@ -24,7 +24,7 @@ import {
   ListThumbnailDirective,
   ListTitleDirective,
   TitleComponent,
-  ToolbarComponent,
+  ToolbarComponent, ToolbarItemDirective,
   ToolbarLabelDirective,
   ToolbarSpacerDirective
 } from "@fundamental-ngx/core";
@@ -33,9 +33,9 @@ import {IssueService} from "../../services/issue-services/issue.service";
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {DialogService} from "@fundamental-ngx/core/dialog";
 import {IssueRequestInterface} from "../../models/issue/issueRequest.interface";
-import {CdkDrag} from "@angular/cdk/drag-drop";
 import {RequestInterface} from "../../models/request/request.interface";
 import {RequestService} from "../../services/request-services/request.service";
+import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component";
 
 @Component({
   selector: 'app-issue-list',
@@ -69,6 +69,8 @@ import {RequestService} from "../../services/request-services/request.service";
     ReactiveFormsModule,
     TitleComponent,
     DialogTemplateDirective,
+    NavigationBarComponent,
+    ToolbarItemDirective,
   ],
   templateUrl: './issue-list.component.html',
   styleUrl: './issue-list.component.scss'
@@ -77,7 +79,9 @@ export class IssueListComponent implements OnInit, OnChanges {
   displayedIssues: IssueInterface[] = [];
   issues: IssueInterface[] = [];
   searchTerm: string = '';
+  productId: number = 2137;
   requestId: number = 0;
+  issueId: number = 0;
   requestName: string = '';
   myForm!: FormGroup;
   @ViewChild('overlay')
@@ -89,13 +93,19 @@ export class IssueListComponent implements OnInit, OnChanges {
               private _cdr: ChangeDetectorRef,
               private _dialogService: DialogService,
               private _fb: FormBuilder,
-              private route: ActivatedRoute) {}
+              private route: ActivatedRoute) {
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras.state) {
+      this.productId = navigation.extras.state['productId'];
+    }
+  }
 
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.requestId = params['id'];
     });
+
    this.fetchData();
    this.handleSearchTermChange('');
     this.myForm = this._fb.group({
@@ -103,6 +113,7 @@ export class IssueListComponent implements OnInit, OnChanges {
       descriptionInput: new FormControl(''),
       productManagerInput: new FormControl('')
     });
+    console.log(this.productId);
   }
 
   ngOnChanges(): void {

@@ -1,9 +1,10 @@
+<app-navigation-bar>
 <fd-flexible-column-layout [(layout)]="localLayout">
   <ng-template #startColumn>
     <div>
       <fd-toolbar aria-label="With Toolbar" fdType="transparent" [clearBorder]="true">
         <h4 fd-title>{{issueName}}</h4>
-        <fd-toolbar-spacer></fd-toolbar-spacer>
+        <fd-toolbar-spacer ></fd-toolbar-spacer>
         <button
           fd-toolbar-item
           fd-button
@@ -121,3 +122,4 @@
     </fd-dialog>
   </ng-template>
 </fd-flexible-column-layout>
+</app-navigation-bar>

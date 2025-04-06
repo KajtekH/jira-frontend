@@ -1,5 +1,5 @@
-<fd-toolbar>
-  <label fd-toolbar-label> Issues for request: {{this.requestName}} </label>
+<app-navigation-bar [title]="'Issues for: ' + requestName">
+<fd-toolbar class="toolbar" fdType="transparent" [clearBorder]="true">
   <fd-toolbar-spacer></fd-toolbar-spacer>
   <fd-input-group
     glyph="decline"
@@ -13,6 +13,7 @@
   >
   </fd-input-group>
   <button
+    fd-toolbar-item
     ariaLabel="Add issue"
     label="Add Issue"
     title="Add issue"
@@ -96,3 +97,4 @@
     </fd-dialog-footer>
   </fd-dialog>
 </ng-template>
+</app-navigation-bar>
