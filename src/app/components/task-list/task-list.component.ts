@@ -45,6 +45,7 @@ import {NgIf} from "@angular/common";
 import {forkJoin} from "rxjs";
 import { ActivatedRoute } from '@angular/router';
 import {IssueService} from "../../services/issue-services/issue.service";
+import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component";
 
 @Component({
   selector: 'app-task-list',
@@ -78,6 +79,7 @@ import {IssueService} from "../../services/issue-services/issue.service";
     FormLabelComponent,
     FormControlComponent,
     NgIf,
+    NavigationBarComponent,
   ]
 })
 export class TaskListComponent implements OnInit {
@@ -120,10 +122,10 @@ export class TaskListComponent implements OnInit {
   fetchData(): void {
     forkJoin({
       issue: this.issueService.getIssueById(this.issueId),
-      todo: this.taskService.getTasksByStatus(this.issueId, 'TO_DO'),
+      todo: this.taskService.getTasksByStatus(this.issueId, 'OPEN'),
       progress: this.taskService.getTasksByStatus(this.issueId, 'IN_PROGRESS'),
-      testing: this.taskService.getTasksByStatus(this.issueId, 'TESTING'),
-      done: this.taskService.getTasksByStatus(this.issueId, 'DONE')
+      testing: this.taskService.getTasksByStatus(this.issueId, 'ABANDONED'),
+      done: this.taskService.getTasksByStatus(this.issueId, 'CLOSED')
     }).subscribe(({issue, todo, progress, testing, done }) => {
       this.issueName = issue.name;
       this.todoList = todo;
@@ -157,22 +159,22 @@ export class TaskListComponent implements OnInit {
     lists.forEach(list => list.classList.remove('dragging'));
   }
 
-  determineUpdateStatus(id: string): "TO_DO" | "IN_PROGRESS" | "TESTING" | "DONE" {
+  determineUpdateStatus(id: string): "OPEN" | "IN_PROGRESS" | "ABANDONED" | "CLOSED" {
     const numericId = parseInt(id.split('-').pop()!, 10);
     if (numericId % 4 === 0) {
-      return "TO_DO";
+      return "OPEN";
     } else if (numericId % 4 === 1) {
       return "IN_PROGRESS";
     } else if (numericId % 4 === 2) {
-      return "TESTING";
+      return "ABANDONED";
     } else if (numericId % 4 === 3) {
-      return "DONE";
+      return "CLOSED";
     }
-    return "TO_DO";
+    return "OPEN";
   }
 
-  moveTask(id: number, newStatus:  "TO_DO" | "IN_PROGRESS" | "TESTING" | "DONE"): void {
-    const taskReq: MoveTaskRequest = {taskId: id, taskStatus: newStatus};
+  moveTask(id: number, newStatus:  "OPEN" | "IN_PROGRESS" | "ABANDONED" | "CLOSED"): void {
+    const taskReq: MoveTaskRequest = {taskId: id, status: newStatus};
     console.log(taskReq);
     this.taskService.moveTask(taskReq).subscribe(() => {
       this.fetchData();
@@ -208,6 +210,7 @@ export class TaskListComponent implements OnInit {
       });
     }, (error) => {
       this._cdr.detectChanges();
+
     });
   }
 }

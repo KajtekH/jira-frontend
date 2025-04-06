@@ -14,22 +14,22 @@ export class RequestService {
   constructor(private http: HttpClient) { }
 
   getRequests(productId: number): Observable<RequestInterface[]> {
-    return this.http.get<RequestInterface[]>(`${this.baseUrl}/${productId}`);
+    return this.http.get<RequestInterface[]>(`${this.baseUrl}/${productId}`, {withCredentials: true});
   }
 
   getRequestById(requestId: number): Observable<RequestInterface> {
-    return this.http.get<RequestInterface>(`${this.baseUrl}/request/${requestId}`, {});
+    return this.http.get<RequestInterface>(`${this.baseUrl}/request/${requestId}`, {withCredentials: true});
   }
 
   addRequest(requestRequest: RequestRequestInterface, productId: number): Observable<RequestInterface> {
-    return this.http.post<RequestInterface>(`${this.baseUrl}/${productId}`, requestRequest);
+    return this.http.post<RequestInterface>(`${this.baseUrl}/${productId}`, requestRequest, {withCredentials: true});
   }
 
   closeRequest(requestId: number): Observable<any> {
-    return this.http.patch(`${this.baseUrl}/${requestId}/CLOSED`, {});
+    return this.http.patch(`${this.baseUrl}/${requestId}/CLOSED`,{}, {withCredentials: true});
   }
 
   abandonRequest(requestId: number): Observable<any> {
-    return this.http.patch(`${this.baseUrl}/${requestId}/ABANDONED`, {});
+    return this.http.patch(`${this.baseUrl}/${requestId}/ABANDONED`,{}, {withCredentials: true});
   }
 }

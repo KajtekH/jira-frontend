@@ -29,6 +29,7 @@ import {DialogService} from "@fundamental-ngx/core/dialog";
 import {ProductService} from "../../services/product-services/product.service";
 import {RequestRequestInterface} from "../../models/request/requestRequest.interface";
 import {ProductRequestInterface} from "../../models/product/product-request.interface";
+import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component";
 
 @Component({
   selector: 'app-product-list',
@@ -60,7 +61,8 @@ import {ProductRequestInterface} from "../../models/product/product-request.inte
     ToolbarSpacerDirective,
     FormsModule,
     ListBylineLeftDirective,
-    DialogTemplateDirective
+    DialogTemplateDirective,
+    NavigationBarComponent
   ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss'

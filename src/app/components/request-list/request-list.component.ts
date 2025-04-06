@@ -34,6 +34,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {IssueRequestInterface} from "../../models/issue/issueRequest.interface";
 import {RequestRequestInterface} from "../../models/request/requestRequest.interface";
 import {ProductService} from "../../services/product-services/product.service";
+import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component";
 
 @Component({
   selector: 'app-request-list',
@@ -64,7 +65,8 @@ import {ProductService} from "../../services/product-services/product.service";
     ToolbarComponent,
     ToolbarLabelDirective,
     ToolbarSpacerDirective,
-    DialogTemplateDirective
+    DialogTemplateDirective,
+    NavigationBarComponent
   ],
   templateUrl: './request-list.component.html',
   styleUrl: './request-list.component.scss'
@@ -147,7 +149,7 @@ export class RequestListComponent implements OnInit, OnChanges{
   }
 
   navigateToIssueList(id: number) {
-    this.router.navigate(['/issue-list', id]);
+    this.router.navigate(['/issue-list', id], { state: { productId: this.productId } });
   }
 
   closeRequest(id: number) {

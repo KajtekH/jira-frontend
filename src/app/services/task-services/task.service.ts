@@ -16,14 +16,14 @@ export class TaskService {
   constructor(private http: HttpClient) { }
 
   getTasksByStatus(issueId: number, status: string): Observable<TaskInterface[]> {
-    return this.http.get<TaskInterface[]>(`${this.baseUrl}/${issueId}/${status}`);
+    return this.http.get<TaskInterface[]>(`${this.baseUrl}/${issueId}/${status}`, {withCredentials: true});
   }
 
   addTask(taskRequest: TaskRequest, issueId: number): Observable<TaskInterface> {
-    return this.http.post<TaskInterface>(`${this.baseUrl}/${issueId}`, taskRequest);
+    return this.http.post<TaskInterface>(`${this.baseUrl}/${issueId}`, taskRequest, {withCredentials: true});
   }
 
   moveTask(request: MoveTaskRequest): Observable<any> {
-    return this.http.patch<any>(`${this.baseUrl}`, request);
+    return this.http.patch<any>(`${this.baseUrl}`, request, {withCredentials: true});
   }
 }

@@ -1,5 +1,5 @@
-<fd-toolbar>
-  <label fd-toolbar-label> Products: </label>
+<app-navigation-bar [title]="'Products:'">
+<fd-toolbar fdType="transparent" [clearBorder]="true" class="toolbar">
   <fd-toolbar-spacer></fd-toolbar-spacer>
   <fd-input-group
     glyph="decline"
@@ -91,3 +91,4 @@
     </fd-dialog-footer>
   </fd-dialog>
 </ng-template>
+</app-navigation-bar>
