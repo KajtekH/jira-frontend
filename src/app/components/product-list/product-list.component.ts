@@ -30,6 +30,8 @@ import {ProductService} from "../../services/product-services/product.service";
 import {RequestRequestInterface} from "../../models/request/requestRequest.interface";
 import {ProductRequestInterface} from "../../models/product/product-request.interface";
 import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component";
+import {WebSocketService} from "../../services/webSocket/web-socket.service";
+import {debounceTime} from "rxjs";
 
 @Component({
   selector: 'app-product-list',
@@ -57,7 +59,6 @@ import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component
     ReactiveFormsModule,
     TitleComponent,
     ToolbarComponent,
-    ToolbarLabelDirective,
     ToolbarSpacerDirective,
     FormsModule,
     ListBylineLeftDirective,
@@ -68,6 +69,7 @@ import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component
   styleUrl: './product-list.component.scss'
 })
 export class ProductListComponent implements OnInit, OnChanges{
+  private webSocketService: WebSocketService | undefined;
   displayedProducts: ProductInterface[] = [];
   products: ProductInterface[] = [];
   searchTerm: string = '';
@@ -81,12 +83,18 @@ export class ProductListComponent implements OnInit, OnChanges{
               private _dialogService: DialogService) { }
 
   ngOnInit(): void {
+    this.webSocketService = new WebSocketService('/products');
     this.fetchData();
     this.handleSearchTermChange('');
     this.myForm = this._fb.group({
       nameInput: new FormControl(''),
       descriptionInput: new FormControl(''),
       ownerInput: new FormControl('')
+    });
+
+    this.webSocketService.taskListUpdates$.subscribe((listId: number) => {
+      debounceTime(500);
+      this.fetchData();
     });
   }
 

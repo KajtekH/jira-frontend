@@ -35,6 +35,8 @@ import {IssueRequestInterface} from "../../models/issue/issueRequest.interface";
 import {RequestRequestInterface} from "../../models/request/requestRequest.interface";
 import {ProductService} from "../../services/product-services/product.service";
 import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component";
+import {WebSocketService} from "../../services/webSocket/web-socket.service";
+import {debounceTime} from "rxjs";
 
 @Component({
   selector: 'app-request-list',
@@ -63,7 +65,6 @@ import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component
     ReactiveFormsModule,
     TitleComponent,
     ToolbarComponent,
-    ToolbarLabelDirective,
     ToolbarSpacerDirective,
     DialogTemplateDirective,
     NavigationBarComponent
@@ -72,10 +73,11 @@ import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component
   styleUrl: './request-list.component.scss'
 })
 export class RequestListComponent implements OnInit, OnChanges{
+  private webSocketService: WebSocketService | undefined;
   displayedRequests: RequestInterface[] = [];
   Requests: RequestInterface[] = [];
   searchTerm: string = '';
-  productId: number = 0;
+  productId: number = -1;
   productName: string = '';
   myForm!: FormGroup;
   @ViewChild('overlay')
@@ -97,12 +99,19 @@ export class RequestListComponent implements OnInit, OnChanges{
       this.productId = params['id'];
     });
     this.fetchData();
+    this.webSocketService = new WebSocketService('/requests');
     this.handleSearchTermChange('');
     this.myForm = this._fb.group({
       nameInput: new FormControl(''),
       descriptionInput: new FormControl(''),
       requestTypeInput: new FormControl(''),
       accountManagerInput: new FormControl('')
+    });
+    this.webSocketService.taskListUpdates$.subscribe((listId: number) => {
+      debounceTime(500);
+      if (listId == this.productId) {
+        this.updateData();
+      }
     });
   }
 
@@ -117,6 +126,13 @@ export class RequestListComponent implements OnInit, OnChanges{
     });
     this.productService.getProductById(this.productId).subscribe(product => {
       this.productName = product.name;
+    });
+  }
+
+  private updateData() {
+    this.requestService.getRequests(this.productId).subscribe(requests => {
+      this.Requests = requests;
+      this.displayedRequests = requests;
     });
   }
 

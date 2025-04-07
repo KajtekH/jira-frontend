@@ -42,10 +42,11 @@ import {TaskDetailsComponent} from "../task-details/task-details.component";
 import {TaskService} from "../../services/task-services/task.service";
 import {TaskRequest} from "../../models/task/taskRequest.interface";
 import {NgIf} from "@angular/common";
-import {forkJoin} from "rxjs";
-import { ActivatedRoute } from '@angular/router';
+import {debounceTime, forkJoin} from "rxjs";
+import {ActivatedRoute, Router} from '@angular/router';
 import {IssueService} from "../../services/issue-services/issue.service";
 import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component";
+import {WebSocketService} from "../../services/webSocket/web-socket.service";
 
 @Component({
   selector: 'app-task-list',
@@ -78,12 +79,14 @@ import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component
     FormItemComponent,
     FormLabelComponent,
     FormControlComponent,
-    NgIf,
     NavigationBarComponent,
   ]
 })
 export class TaskListComponent implements OnInit {
+  private webSocketService: WebSocketService | undefined;
   issueId: number = 1;
+  requestId: number = -1;
+  productId: number = -1;
   issueName: string = '';
   todoList: TaskInterface[] = [];
   progressList: TaskInterface[]  = [];
@@ -103,20 +106,39 @@ export class TaskListComponent implements OnInit {
     private issueService: IssueService,
     private _dialogService: DialogService,
     private _fb: FormBuilder,
-    private _cdr: ChangeDetectorRef, private route: ActivatedRoute) {}
+    private _cdr: ChangeDetectorRef,
+              private route: ActivatedRoute,
+              private router: Router) {
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras.state) {
+      this.productId = navigation.extras.state['productId'];
+      this.requestId = navigation.extras.state['requestId'];
+    }
+  }
 
   ngOnInit(): void  {
     this.route.params.subscribe(params => {
       this.issueId = params['id'];
     });
     this.fetchData();
-
+    console.log("issuename:" + this.issueName);
+    this.webSocketService = new WebSocketService('/tasks');
     this.myForm = this._fb.group({
       nameInput: new FormControl(''),
       descriptionInput: new FormControl(''),
       typeInput: new FormControl(''),
       assigneeInput: new FormControl('')
     });
+
+    this.webSocketService.taskListUpdates$.subscribe((listId: number) => {
+      debounceTime(500);
+      if (listId == this.issueId) {
+        this.isLoading = true;
+        this.updateData();
+      }
+    });
+
+
   }
 
   fetchData(): void {
@@ -127,7 +149,24 @@ export class TaskListComponent implements OnInit {
       testing: this.taskService.getTasksByStatus(this.issueId, 'ABANDONED'),
       done: this.taskService.getTasksByStatus(this.issueId, 'CLOSED')
     }).subscribe(({issue, todo, progress, testing, done }) => {
+      console.log(issue);
       this.issueName = issue.name;
+      this.todoList = todo;
+      this.progressList = progress;
+      this.testingList = testing;
+      this.doneList = done;
+      this.isLoading = false;
+      this._cdr.detectChanges();
+    });
+  }
+
+  updateData(): void {
+    forkJoin({
+      todo: this.taskService.getTasksByStatus(this.issueId, 'OPEN'),
+      progress: this.taskService.getTasksByStatus(this.issueId, 'IN_PROGRESS'),
+      testing: this.taskService.getTasksByStatus(this.issueId, 'ABANDONED'),
+      done: this.taskService.getTasksByStatus(this.issueId, 'CLOSED')
+    }).subscribe(({todo, progress, testing, done }) => {
       this.todoList = todo;
       this.progressList = progress;
       this.testingList = testing;
@@ -176,9 +215,7 @@ export class TaskListComponent implements OnInit {
   moveTask(id: number, newStatus:  "OPEN" | "IN_PROGRESS" | "ABANDONED" | "CLOSED"): void {
     const taskReq: MoveTaskRequest = {taskId: id, status: newStatus};
     console.log(taskReq);
-    this.taskService.moveTask(taskReq).subscribe(() => {
-      this.fetchData();
-    });
+    this.taskService.moveTask(taskReq).subscribe(() => {});
   }
 
   changeLayout(newValue: FlexibleColumnLayout, task: TaskInterface) {

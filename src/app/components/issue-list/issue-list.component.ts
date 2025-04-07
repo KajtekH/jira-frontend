@@ -36,6 +36,8 @@ import {IssueRequestInterface} from "../../models/issue/issueRequest.interface";
 import {RequestInterface} from "../../models/request/request.interface";
 import {RequestService} from "../../services/request-services/request.service";
 import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component";
+import {WebSocketService} from "../../services/webSocket/web-socket.service";
+import {debounceTime} from "rxjs";
 
 @Component({
   selector: 'app-issue-list',
@@ -54,7 +56,6 @@ import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component
     ButtonComponent,
     ToolbarComponent,
     ToolbarSpacerDirective,
-    ToolbarLabelDirective,
     InputGroupComponent,
     FormsModule,
     ButtonBarComponent,
@@ -76,12 +77,12 @@ import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component
   styleUrl: './issue-list.component.scss'
 })
 export class IssueListComponent implements OnInit, OnChanges {
+  private webSocketService: WebSocketService | undefined;
   displayedIssues: IssueInterface[] = [];
   issues: IssueInterface[] = [];
   searchTerm: string = '';
-  productId: number = 2137;
-  requestId: number = 0;
-  issueId: number = 0;
+  productId: number = -1;
+  requestId: number = -1;
   requestName: string = '';
   myForm!: FormGroup;
   @ViewChild('overlay')
@@ -98,15 +99,15 @@ export class IssueListComponent implements OnInit, OnChanges {
     if (navigation?.extras.state) {
       this.productId = navigation.extras.state['productId'];
     }
+    this.route.params.subscribe((params) => {
+      this.requestId = params['id'];
+    });
   }
 
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      this.requestId = params['id'];
-    });
-
    this.fetchData();
+   this.webSocketService = new WebSocketService('/issues');
    this.handleSearchTermChange('');
     this.myForm = this._fb.group({
       nameInput: new FormControl(''),
@@ -114,6 +115,12 @@ export class IssueListComponent implements OnInit, OnChanges {
       productManagerInput: new FormControl('')
     });
     console.log(this.productId);
+    this.webSocketService.taskListUpdates$.subscribe((listId: number) => {
+      debounceTime(500);
+      if (listId == this.requestId) {
+        this.updateData();
+      }
+    });
   }
 
   ngOnChanges(): void {
@@ -130,9 +137,18 @@ export class IssueListComponent implements OnInit, OnChanges {
     });
   }
 
+  updateData(): void {
+    this.issueService.getIssues(this.requestId).subscribe((issues: IssueInterface[]) => {
+      this.issues = issues;
+      this.displayedIssues = issues;
+    });
+  }
+
 
   navigateToTaskList(issueId: number): void {
-    this.router.navigate(['/task-list', issueId]);
+    this.router.navigate(['/task-list', issueId], {
+      state: { requestId: this.requestId, productId: this.productId }
+    });
   }
 
   abandonIssue(issueId: number): void {
@@ -159,7 +175,7 @@ export class IssueListComponent implements OnInit, OnChanges {
   addIssue(dialog: TemplateRef<any>): void {
     const dialogRef = this._dialogService.open(dialog, {responsivePadding: false, resizable: true});
 
-    dialogRef.afterClosed.subscribe((result) => {
+    dialogRef.afterClosed.subscribe(() => {
       this._cdr.detectChanges();
       const issueRequest: IssueRequestInterface = {
         name: this.myForm.value.nameInput,

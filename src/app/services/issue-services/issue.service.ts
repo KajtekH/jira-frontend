@@ -17,7 +17,7 @@ export class IssueService {
   }
 
   getIssueById(issueId: number): Observable<IssueInterface> {
-    return this.http.get<IssueInterface>(`${this.baseUrl}/${issueId}`, {withCredentials: true});
+    return this.http.get<IssueInterface>(`${this.baseUrl}/issue/${issueId}`, {withCredentials: true});
   }
 
   abandonIssue(issueId: number): Observable<any> {
