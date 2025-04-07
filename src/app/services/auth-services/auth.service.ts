@@ -44,7 +44,7 @@ export class AuthService {
     }
   }
 
-  private refreshToken() {
+  public refreshToken() {
     this.http.post(`${this.baseUrl}/refresh`,{}, { withCredentials: true })
       .subscribe(
         (response: any) => {

@@ -21,7 +21,6 @@ import {Router} from "@angular/router";
     ShellbarLogoComponent,
     ShellbarSubtitleComponent,
     ShellbarActionsComponent,
-    ShellbarActionComponent,
     ShellbarComponent,
     FundamentalNgxCxModule,
     ButtonComponent,
@@ -33,6 +32,9 @@ import {Router} from "@angular/router";
 export class NavigationBarComponent implements  OnInit {
   condensed = true;
   @Input() title = '';
+  @Input() productVisible = false;
+  @Input() productId = -1;
+  @Input() requestId = -1;
 
   constructor(private authService: AuthService,
               private router: Router) {
@@ -52,6 +54,8 @@ export class NavigationBarComponent implements  OnInit {
       const decryptedResponse = JSON.parse(decryptedData.toString(CryptoJS.enc.Utf8));
       this.user.fullName = decryptedResponse.firstName + ' ' + decryptedResponse.lastName;
     }
+    console.log("productId", this.productId);
+    console.log("requestId", this.requestId);
   }
 
   onLogout() {
@@ -66,5 +70,16 @@ export class NavigationBarComponent implements  OnInit {
         console.error('Logout error:', error);
       }
     });
+  }
+
+  navigateToProducts() {
+    this.router.navigate(['/product-list']);
+  }
+  navigateToRequests() {
+    this.router.navigate(['/request-list/' + this.productId]);
+  }
+
+  navigateToIssues() {
+    this.router.navigate(['/issue-list/' + this.requestId], { state: { productId: this.productId } });
   }
 }

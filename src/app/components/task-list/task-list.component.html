@@ -1,4 +1,4 @@
-<app-navigation-bar>
+<app-navigation-bar [title]="'Tasks for issue: ' + issueName" [productVisible]="true" [productId]="productId" [requestId]="requestId" >
 <fd-flexible-column-layout [(layout)]="localLayout">
   <ng-template #startColumn>
     <div>
