@@ -1,0 +1,23 @@
+// Remove default margins/padding and disable scroll
+::ng-deep {
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+// Container styling
+.container {
+  width: 100vw;
+  height: 100vh;
+  padding: 20px;
+  background-color: #f0f0f0;
+  overflow: auto; // Optional: Add scroll inside container if needed
+}

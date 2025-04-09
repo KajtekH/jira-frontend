@@ -5,7 +5,7 @@ import {
   ShellbarActionComponent,
   ShellbarActionsComponent, ShellbarComponent,
   ShellbarLogoComponent,
-  ShellbarSubtitleComponent,
+  ShellbarSubtitleComponent, ShellbarTitleComponent,
   ShellbarUser,
   ShellbarUserMenu
 } from "@fundamental-ngx/core";
@@ -18,8 +18,7 @@ import {Router} from "@angular/router";
   selector: 'app-navigation-bar',
   standalone: true,
   imports: [
-    ShellbarLogoComponent,
-    ShellbarSubtitleComponent,
+    ShellbarTitleComponent,
     ShellbarActionsComponent,
     ShellbarComponent,
     FundamentalNgxCxModule,

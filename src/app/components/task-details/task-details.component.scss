@@ -1,0 +1,42 @@
+.transparent-textarea,
+.transparent-title-textarea {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  overflow: auto ; /* Enable scrolling */
+  resize: none ; /* Prevent manual resizing */
+  font-size: 25px !important;
+  font-weight: 400 !important;
+}
+
+.title-content{
+  width: 100% !important;
+  height: 100% !important;
+  font-size: 16px !important;
+}
+
+.fd-scrollbar {
+  height: 100%;
+}
+
+.fd-dynamic-page__content {
+  display: flex !important;
+  outline: none !important;
+  padding: 5px !important;
+}
+
+.title-content {
+  height: 100%;
+}
+
+::ng-deep .fd-scrollbar {
+  height: 100%;
+}
+
+.title-font{
+  font-size: 30px !important;
+  font-weight: 400 !important;
+  color: #000000 !important;
+  text-align: left !important;
+}

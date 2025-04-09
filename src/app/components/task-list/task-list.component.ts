@@ -135,6 +135,7 @@ export class TaskListComponent implements OnInit {
       if (listId == this.issueId) {
         this.isLoading = true;
         this.updateData();
+        this._cdr.detectChanges();
       }
     });
 
@@ -144,33 +145,25 @@ export class TaskListComponent implements OnInit {
   fetchData(): void {
     forkJoin({
       issue: this.issueService.getIssueById(this.issueId),
-      todo: this.taskService.getTasksByStatus(this.issueId, 'OPEN'),
-      progress: this.taskService.getTasksByStatus(this.issueId, 'IN_PROGRESS'),
-      testing: this.taskService.getTasksByStatus(this.issueId, 'ABANDONED'),
-      done: this.taskService.getTasksByStatus(this.issueId, 'CLOSED')
-    }).subscribe(({issue, todo, progress, testing, done }) => {
+      tasks: this.taskService.getAllTasks(this.issueId),
+    }).subscribe(({issue, tasks }) => {
       console.log(issue);
       this.issueName = issue.name;
-      this.todoList = todo;
-      this.progressList = progress;
-      this.testingList = testing;
-      this.doneList = done;
+      this.todoList = tasks.openTasks
+      this.progressList = tasks.inProgressTasks;
+      this.testingList = tasks.abandonedTasks;
+      this.doneList = tasks.closedTasks;
       this.isLoading = false;
       this._cdr.detectChanges();
     });
   }
 
   updateData(): void {
-    forkJoin({
-      todo: this.taskService.getTasksByStatus(this.issueId, 'OPEN'),
-      progress: this.taskService.getTasksByStatus(this.issueId, 'IN_PROGRESS'),
-      testing: this.taskService.getTasksByStatus(this.issueId, 'ABANDONED'),
-      done: this.taskService.getTasksByStatus(this.issueId, 'CLOSED')
-    }).subscribe(({todo, progress, testing, done }) => {
-      this.todoList = todo;
-      this.progressList = progress;
-      this.testingList = testing;
-      this.doneList = done;
+    this.taskService.getAllTasks(this.issueId).subscribe((response) => {
+      this.todoList = response.openTasks;
+      this.progressList = response.inProgressTasks;
+      this.testingList = response.abandonedTasks;
+      this.doneList = response.closedTasks;
       this.isLoading = false;
       this._cdr.detectChanges();
     });
@@ -239,7 +232,7 @@ export class TaskListComponent implements OnInit {
         name: this.myForm.value.nameInput,
         description: this.myForm.value.descriptionInput,
         assignee: this.myForm.value.assigneeInput,
-        taskType: this.myForm.value.typeInput
+        type: this.myForm.value.typeInput
       };
       console.log(taskRequest);
       this.taskService.addTask(taskRequest, this.issueId).subscribe((task) => {

@@ -27,3 +27,8 @@
 .toolbar{
   height: 50px;
 }
+
+ul[fd-list] {
+  max-height: 100vh; /* Set the maximum height */
+  overflow-y: auto;  /* Enable vertical scrolling */
+}
