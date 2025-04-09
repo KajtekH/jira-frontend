@@ -18,7 +18,7 @@ import {
   ListFooterDirective,
   ListItemComponent,
   ListThumbnailDirective,
-  ListTitleDirective,
+  ListTitleDirective, ScrollbarDirective,
   TitleComponent, ToolbarComponent, ToolbarLabelDirective, ToolbarSpacerDirective
 } from "@fundamental-ngx/core";
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
@@ -63,7 +63,8 @@ import {debounceTime} from "rxjs";
     FormsModule,
     ListBylineLeftDirective,
     DialogTemplateDirective,
-    NavigationBarComponent
+    NavigationBarComponent,
+    ScrollbarDirective
   ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss'

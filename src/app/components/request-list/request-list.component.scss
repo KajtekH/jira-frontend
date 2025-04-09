@@ -1,29 +1,31 @@
 .OPEN{
-
+  border-radius: 10px;
 }
 
 .CLOSED{
   background-color: #f0f0f0;
+  border-radius: 10px;
 }
 
 .ABANDONED{
   background-color: #ffeaf4;
+  border-radius: 20px;
 }
 
 .item {
-  padding: 10px;
-  margin: 5px 0;
-  border: 1px solid #ddd;
-  border-radius: 3px;
-  background-color: #fff;
-  cursor: move;
-  height: 500px;
-}
-
-.item:hover {
-  background-color: #f1f1f1;
+  border-radius: 20px;
 }
 
 .toolbar{
   height: 50px;
+}
+
+ul[fd-list] {
+  padding: 10px !important;
+  max-height: 100vh; /* Set the maximum height */
+  overflow-y: auto;  /* Enable vertical scrolling */
+}
+
+li[fd-list-item] {
+  margin-bottom: 10px !important;
 }

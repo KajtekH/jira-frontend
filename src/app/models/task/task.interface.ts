@@ -7,4 +7,5 @@ export interface TaskInterface {
   type: 'QUALITY' | 'FEATURE' | 'BUG' | 'IMPROVEMENT';
   status: 'TO_DO' | 'IN_PROGRESS' | 'TESTING' | 'DONE';
   assignee: string;
+  priority: number;
 }

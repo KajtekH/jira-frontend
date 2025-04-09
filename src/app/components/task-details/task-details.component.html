@@ -1,5 +1,18 @@
 <fd-dynamic-page [autoResponsive]="false" ariaLabel="Example Dynamic Page">
-  <fd-dynamic-page-header title="{{TaskData?.name}}">
+  <fd-dynamic-page-header  >
+    <fd-dynamic-page-title-content class="title-content">
+      <textarea
+        [value]="TaskData?.name"
+        (blur)="onTitleChange($event)"
+        fd-form-control
+        id="textarea-14"
+        fdCompact
+        placeholder="Field placeholder text"
+        aria-required="true"
+        class="transparent-title-textarea title-font"
+        spellcheck="false"
+      ></textarea>
+    </fd-dynamic-page-title-content>
     <fd-dynamic-page-layout-actions>
       <fd-toolbar fdType="transparent" [clearBorder]="true">
           <button
@@ -19,18 +32,19 @@
                                 {{TaskData?.type}}
                             </span>
   </fd-dynamic-page-subheader>
-  <fd-dynamic-page-content cdkScrollable>
-    <div
-      class="fd-dynamic-page-section-example"
-      [ngStyle]="{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                }"
-    >
-    </div>
-    <div class="fd-dynamic-page-section-example">
-      {{TaskData?.description}}
+  <fd-dynamic-page-content class="title-content">
+    <div class="fd-dynamic-page-section-example title-content">
+        <textarea
+          [value]="TaskData?.description"
+          (blur)="onDescriptionChange($event)"
+          fd-form-control
+          id="textarea-13"
+          fdCompact
+          placeholder="Field placeholder text"
+          aria-required="true"
+          class="transparent-textarea title-content"
+          spellcheck="false"
+        ></textarea>
     </div>
   </fd-dynamic-page-content>
 
