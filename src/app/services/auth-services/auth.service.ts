@@ -23,6 +23,10 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}/logout`, {}, { withCredentials: true });
   }
 
+  register(registerRequest: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/register`, registerRequest, { withCredentials: true });
+  }
+
   startTokenRefresh() {
     const exp = localStorage.getItem('exp');
     if (exp) {
