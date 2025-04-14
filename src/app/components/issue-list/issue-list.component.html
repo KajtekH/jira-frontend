@@ -34,10 +34,10 @@
       <div fd-list-footer class="{{issue.status}}">{{issue.productManager}}</div>
       <div fd-list-byline [twoCol]="true">
         @if(issue.closeDate){
-        <div fd-list-byline-left>Opened: {{issue.openDate}}  Closed:  {{issue.closeDate}}</div>
+        <div fd-list-byline-left>Opened: {{issue.openDate | date:'dd MMM yyyy HH:mm'}}  &nbsp; &nbsp; &nbsp; Closed:  {{issue.closeDate | date:'dd MMM yyyy HH:mm'}}</div>
         }
         @else{
-          <div fd-list-byline-left>Opened: {{issue.openDate}}</div>
+          <div fd-list-byline-left>Opened: {{issue.openDate | date:'dd MMM yyyy HH:mm'}}</div>
         }
         <div fd-list-byline-right>{{issue.doneTasksCount}}/{{issue.tasksCount}}</div>
       </div>

@@ -38,6 +38,7 @@ import {RequestService} from "../../services/request-services/request.service";
 import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component";
 import {WebSocketService} from "../../services/webSocket/web-socket.service";
 import {debounceTime} from "rxjs";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-issue-list',
@@ -72,6 +73,7 @@ import {debounceTime} from "rxjs";
     DialogTemplateDirective,
     NavigationBarComponent,
     ToolbarItemDirective,
+    DatePipe,
   ],
   templateUrl: './issue-list.component.html',
   styleUrl: './issue-list.component.scss'

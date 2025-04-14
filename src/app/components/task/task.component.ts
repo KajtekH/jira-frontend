@@ -3,12 +3,13 @@ import { AvatarComponent, ButtonComponent, TextComponent } from '@fundamental-ng
 import { CardModule } from '@fundamental-ngx/core/card';
 import {TaskInterface} from "../../models/task/task.interface";
 import {CdkDrag} from "@angular/cdk/drag-drop";
+import {DatePipe} from "@angular/common";
 
 
 @Component({
   selector: 'app-task',
   standalone: true,
-  imports: [AvatarComponent, ButtonComponent, TextComponent, CardModule, CdkDrag],
+  imports: [AvatarComponent, ButtonComponent, TextComponent, CardModule, CdkDrag, DatePipe],
   templateUrl: './task.component.html',
   styleUrl: './task.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

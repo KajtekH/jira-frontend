@@ -35,7 +35,7 @@
   <fd-dynamic-page-content class="title-content">
     <div class="fd-dynamic-page-section-example title-content">
         <textarea
-          [value]="TaskData?.description"
+          [innerHTML]="TaskData?.description"
           (blur)="onDescriptionChange($event)"
           fd-form-control
           id="textarea-13"

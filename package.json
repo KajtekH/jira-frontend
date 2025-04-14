@@ -29,6 +29,7 @@
     "@types/sockjs-client": "^1.5.4",
     "crypto-js": "^4.2.0",
     "fundamental-styles": "0.38.0",
+    "ngx-markdown": "^18.0.0",
     "rxjs": "~7.8.0",
     "socket.io": "^4.8.1",
     "sockjs": "^0.3.24",
