@@ -1,7 +1,6 @@
 <div class="center-form-container">
   <div class="center-form">
-    <fd-dialog-body>
-      <form [formGroup]="myForm">
+      <form [formGroup]="loginForm">
         <div fd-form-set>
           <div fd-form-item>
             <label fd-form-label for="input-1">Username</label>
@@ -34,16 +33,95 @@
         (click)="onLogin()"
         fdType="emphasized"
         class="full-width-button"
-      >Login</button>
-    </fd-dialog-body>
-    <fd-dialog-footer>
+      ></button>
       <button
         fd-toolbar-item
         fd-button
         label="Register"
         fdType="transparent"
         class="full-width-button"
-      >Register</button>
-    </fd-dialog-footer>
+        (click)="openDialog(newItemDialog)"
+      ></button>
+    <ng-template [fdDialogTemplate] let-dialog let-dialogConfig="dialogConfig"#newItemDialog cdkDrag
+                 [cdkDragDisabled]="true">
+      <fd-dialog [dialogConfig]="dialogConfig" [dialogRef]="dialog">
+        <fd-dialog-header>
+          <h1 fd-title>Register</h1>
+          <button fd-dialog-close-button (click)="dialog.dismiss('Close button')"></button>
+        </fd-dialog-header>
+        <fd-dialog-body class="dialog-container">
+          <form [formGroup]="registerForm">
+            <div fd-form-set>
+              <div fd-form-item>
+                <label fd-form-label for="input-1">First Name</label>
+                <input
+                  fd-form-control
+                  formControlName="firstNameInput"
+                  type="text"
+                  id="input-3"
+                  autocomplete="off"
+                />
+              </div>
+              <div fd-form-item>
+                <label fd-form-label for="input-4">Last Name</label>
+                <input
+                  fd-form-control
+                  formControlName="lastNameInput"
+                  type="text"
+                  id="input-4"
+                  autocomplete="off"
+                />
+              </div>
+              <div fd-form-item>
+                <label fd-form-label for="input-5">email</label>
+                <input
+                  fd-form-control
+                  formControlName="emailInput"
+                  type="text"
+                  id="input-5"
+                  autocomplete="off"
+                />
+              </div>
+              <div fd-form-item>
+                <label fd-form-label for="input-6">username</label>
+                <input
+                  fd-form-control
+                  formControlName="registerUsernameInput"
+                  type="text"
+                  id="input-6"
+                  autocomplete="off"
+                />
+              </div>
+              <div fd-form-item>
+                <label fd-form-label for="input-7">password</label>
+                <input
+                  fd-form-control
+                  formControlName="registerPasswordInput"
+                  type="password"
+                  id="input-7"
+                  autocomplete="off"
+                />
+              </div>
+              <div fd-form-item>
+                <label fd-form-label for="input-8">confirm password</label>
+                <input
+                  fd-form-control
+                  formControlName="confirmPasswordInput"
+                  type="password"
+                  id="input-8"
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+          </form>
+        </fd-dialog-body>
+        <fd-dialog-footer>
+          <fd-button-bar fdType="emphasized" label="Register" type="submit" (click)="dialog.close('Save')">
+          </fd-button-bar>
+          <fd-button-bar label="Cancel" (click)="dialog.dismiss('Cancel')"></fd-button-bar>
+        </fd-dialog-footer>
+      </fd-dialog>
+    </ng-template>
   </div>
 </div>
+
