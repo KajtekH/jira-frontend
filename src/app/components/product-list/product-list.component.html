@@ -33,7 +33,7 @@
         <div fd-list-footer>{{product.owner}}</div>
         <div fd-list-byline [twoCol]="true">
           @if(product.releaseDate){
-            <div fd-list-byline-left>Version: {{product.version}}    Released:  {{product.releaseDate}}</div>
+            <div fd-list-byline-left>Version: {{product.version}}  &nbsp; &nbsp; &nbsp;  Released:  {{product.releaseDate | date:'dd MMM yyyy HH:mm'}}</div>
           }
           @else{
             <div fd-list-byline-left>Version: {{product.version}}</div>

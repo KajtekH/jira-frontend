@@ -32,6 +32,7 @@ import {ProductRequestInterface} from "../../models/product/product-request.inte
 import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component";
 import {WebSocketService} from "../../services/webSocket/web-socket.service";
 import {debounceTime} from "rxjs";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-product-list',
@@ -64,7 +65,8 @@ import {debounceTime} from "rxjs";
     ListBylineLeftDirective,
     DialogTemplateDirective,
     NavigationBarComponent,
-    ScrollbarDirective
+    ScrollbarDirective,
+    DatePipe
   ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss'

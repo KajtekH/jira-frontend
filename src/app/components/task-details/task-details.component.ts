@@ -15,6 +15,7 @@ import {FormsModule} from "@angular/forms";
 import { TaskService } from '../../services/task-services/task.service';
 import {TaskRequest} from "../../models/task/taskRequest.interface";
 import {DynamicPageTitleComponent} from "@fundamental-ngx/platform";
+import {MarkdownComponent, MarkdownModule, MarkdownPipe} from "ngx-markdown";
 
 @Component({
   selector: 'app-task-details',
@@ -34,7 +35,10 @@ import {DynamicPageTitleComponent} from "@fundamental-ngx/platform";
     ContentDensityDirective,
     DynamicPageTitleContentComponent,
     DynamicPageTitleComponent,
-    ScrollbarDirective
+    ScrollbarDirective,
+    MarkdownPipe,
+    MarkdownModule,
+    MarkdownComponent
   ],
   templateUrl: './task-details.component.html',
   styleUrl: './task-details.component.scss'

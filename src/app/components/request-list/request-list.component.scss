@@ -22,10 +22,12 @@
 
 ul[fd-list] {
   padding: 10px !important;
-  max-height: 100vh; /* Set the maximum height */
-  overflow-y: auto;  /* Enable vertical scrolling */
+  max-height: 90vh;
+  max-width: 70vw;
+  overflow-y: auto;
 }
 
 li[fd-list-item] {
   margin-bottom: 10px !important;
+  max-width: 95vw;
 }

@@ -8,10 +8,10 @@
     <fd-card-extended-header [align]="'bottom'">
       <div fd-card-header-column>
         <div fd-card-header-row>
-          <fd-text text="Created at: {{task?.createdAt}}"></fd-text>
+          <fd-text text="Created at: {{task?.createdAt | date:'dd MMM yyyy HH:mm'}}"></fd-text>
         </div>
         <div fd-card-header-row>
-          <fd-text text="Updated at: {{task?.updatedAt}}"></fd-text>
+          <fd-text text="Updated at: {{task?.updatedAt | date:'dd MMM yyyy HH:mm'}}"></fd-text>
         </div>
       </div>
       <div fd-card-header-column [align]="'right'">
