@@ -1,4 +1,13 @@
-import {ChangeDetectorRef, Component, ElementRef, OnChanges, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import {
   ButtonBarComponent,
   ButtonComponent,
@@ -72,7 +81,7 @@ import {debounceTime} from "rxjs";
   templateUrl: './request-list.component.html',
   styleUrl: './request-list.component.scss'
 })
-export class RequestListComponent implements OnInit, OnChanges{
+export class RequestListComponent implements OnInit, OnChanges, OnDestroy{
   private webSocketService: WebSocketService | undefined;
   displayedRequests: RequestInterface[] = [];
   Requests: RequestInterface[] = [];
@@ -113,6 +122,10 @@ export class RequestListComponent implements OnInit, OnChanges{
         this.updateData();
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.webSocketService?.taskListUpdates$.unsubscribe();
   }
 
   ngOnChanges() {

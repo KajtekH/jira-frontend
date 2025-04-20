@@ -16,10 +16,6 @@ export class TaskService {
 
   constructor(private http: HttpClient) { }
 
-  getTasksByStatus(issueId: number, status: string): Observable<TaskInterface[]> {
-    return this.http.get<TaskInterface[]>(`${this.baseUrl}/${issueId}/${status}`, {withCredentials: true});
-  }
-
   getAllTasks(issueId: number): Observable<TaskListResponse> {
     return this.http.get<TaskListResponse>(`${this.baseUrl}/${issueId}`, {withCredentials: true});
   }

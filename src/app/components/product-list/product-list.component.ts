@@ -1,4 +1,13 @@
-import {ChangeDetectorRef, Component, ElementRef, OnChanges, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import {
   ButtonBarComponent,
   ButtonComponent,
@@ -71,7 +80,7 @@ import {DatePipe} from "@angular/common";
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss'
 })
-export class ProductListComponent implements OnInit, OnChanges{
+export class ProductListComponent implements OnInit, OnChanges, OnDestroy{
   private webSocketService: WebSocketService | undefined;
   displayedProducts: ProductInterface[] = [];
   products: ProductInterface[] = [];
@@ -99,6 +108,10 @@ export class ProductListComponent implements OnInit, OnChanges{
       debounceTime(500);
       this.fetchData();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.webSocketService?.taskListUpdates$.unsubscribe();
   }
 
   ngOnChanges(): void {

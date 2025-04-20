@@ -2,7 +2,7 @@
 import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
-  ElementRef,
+  ElementRef, OnDestroy,
   OnInit, TemplateRef,
   ViewChild
 } from '@angular/core';
@@ -82,7 +82,7 @@ import {WebSocketService} from "../../services/webSocket/web-socket.service";
     NavigationBarComponent,
   ]
 })
-export class TaskListComponent implements OnInit {
+export class TaskListComponent implements OnInit, OnDestroy {
   private webSocketService: WebSocketService | undefined;
   issueId: number = 1;
   requestId: number = -1;
@@ -138,8 +138,10 @@ export class TaskListComponent implements OnInit {
         this._cdr.detectChanges();
       }
     });
+  }
 
-
+  ngOnDestroy() {
+    this.webSocketService?.taskListUpdates$.unsubscribe()
   }
 
   fetchData(): void {
