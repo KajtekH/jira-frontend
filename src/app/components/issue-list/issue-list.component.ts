@@ -1,4 +1,13 @@
-import {ChangeDetectorRef, Component, ElementRef, OnChanges, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import {IssueInterface} from "../../models/issue/issue.interface";
 import {
   ButtonBarComponent,
@@ -78,7 +87,7 @@ import {DatePipe} from "@angular/common";
   templateUrl: './issue-list.component.html',
   styleUrl: './issue-list.component.scss'
 })
-export class IssueListComponent implements OnInit, OnChanges {
+export class IssueListComponent implements OnInit, OnChanges, OnDestroy {
   private webSocketService: WebSocketService | undefined;
   displayedIssues: IssueInterface[] = [];
   issues: IssueInterface[] = [];
@@ -123,6 +132,10 @@ export class IssueListComponent implements OnInit, OnChanges {
         this.updateData();
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.webSocketService?.taskListUpdates$.unsubscribe();
   }
 
   ngOnChanges(): void {
