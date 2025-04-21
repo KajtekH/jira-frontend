@@ -21,13 +21,10 @@
     (click)="addRequest(newIssueDialog)"
   ></button>
 </fd-toolbar>
-<div>
-  <span></span>
-</div>
 <ul fd-list [byline]="true" [unreadIndicator]="true">
   @for (request of displayedRequests; track $index) {
     <li fd-list-item [unread]="true" aria-description="unread" class="{{request.status}} item" (click)="navigateToIssueList(request.id)">
-      <span fd-list-thumbnail><fd-icon glyph="{{this.getTypeIcon(request)}}" [ariaLabel]="request.requestType" title="{{request.requestType}}"></fd-icon></span>
+      <fd-avatar size="l" [transparent]="true" glyph="{{this.getTypeIcon(request)}}" ariaLabel="avatar image" title="{{this.request.requestType}}">{{this.request.requestType}}</fd-avatar>
       <div fd-list-content class="{{request.status}}">
         <div fd-list-title>{{request.name}}</div>
         <div fd-list-footer class="{{request.status}}">{{request.accountManager}}</div>

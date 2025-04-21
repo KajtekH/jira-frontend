@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import {IssueInterface} from "../../models/issue/issue.interface";
 import {
+  AvatarComponent,
   ButtonBarComponent,
   ButtonComponent,
   DialogBodyComponent,
@@ -83,6 +84,7 @@ import {DatePipe} from "@angular/common";
     NavigationBarComponent,
     ToolbarItemDirective,
     DatePipe,
+    AvatarComponent,
   ],
   templateUrl: './issue-list.component.html',
   styleUrl: './issue-list.component.scss'
@@ -123,6 +125,7 @@ export class IssueListComponent implements OnInit, OnChanges, OnDestroy {
     this.myForm = this._fb.group({
       nameInput: new FormControl(''),
       descriptionInput: new FormControl(''),
+      issueTypeInput: new FormControl(''),
       productManagerInput: new FormControl('')
     });
     console.log(this.productId);
@@ -195,6 +198,7 @@ export class IssueListComponent implements OnInit, OnChanges, OnDestroy {
       const issueRequest: IssueRequestInterface = {
         name: this.myForm.value.nameInput,
         description: this.myForm.value.descriptionInput,
+        issueType: this.myForm.value.issueTypeInput,
         productManager: this.myForm.value.productManagerInput,
       };
       console.log(issueRequest);
@@ -205,5 +209,20 @@ export class IssueListComponent implements OnInit, OnChanges, OnDestroy {
     }, (error) => {
       this._cdr.detectChanges();
     });
+  }
+
+  getTypeIcon(issueType: string): string {
+    switch (issueType) {
+      case 'ERROR':
+        return 'status-error';
+      case 'CRITICAL_ERROR':
+        return 'status-critical';
+      case 'CHANGE':
+        return 'synchronize';
+      case 'FEATURE':
+        return 'lab';
+      default:
+        return 'lab';
+    }
   }
 }

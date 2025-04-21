@@ -9,6 +9,7 @@ import {
   ViewChild
 } from '@angular/core';
 import {
+  AvatarComponent,
   ButtonBarComponent,
   ButtonComponent,
   DialogBodyComponent,
@@ -75,7 +76,8 @@ import {DatePipe} from "@angular/common";
     DialogTemplateDirective,
     NavigationBarComponent,
     ScrollbarDirective,
-    DatePipe
+    DatePipe,
+    AvatarComponent
   ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss'
