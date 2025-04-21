@@ -4,6 +4,7 @@ export interface IssueInterface {
   description: string;
   openDate: string;
   closeDate: string | null;
+  issueType: string;
   status: "OPEN" | "CLOSED" | "ABANDONED";
   productManager: string;
   tasksCount: number;

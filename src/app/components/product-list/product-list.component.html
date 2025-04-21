@@ -27,7 +27,7 @@
 <ul fd-list [byline]="true" [unreadIndicator]="true" fd-scrollbar>
   @for (product of displayedProducts; track $index) {
     <li fd-list-item [unread]="true" aria-description="unread" (click)="navigateToRequestList(product.id)">
-      <span fd-list-thumbnail><fd-icon glyph="product"></fd-icon></span>
+   <fd-avatar size="l" [transparent]="true" glyph="product"></fd-avatar>
       <div fd-list-content>
         <div fd-list-title>{{product.name}}</div>
         <div fd-list-footer>{{product.owner}}</div>

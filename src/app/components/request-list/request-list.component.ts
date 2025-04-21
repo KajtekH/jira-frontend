@@ -9,6 +9,7 @@ import {
   ViewChild
 } from '@angular/core';
 import {
+  AvatarComponent,
   ButtonBarComponent,
   ButtonComponent,
   DialogBodyComponent,
@@ -76,7 +77,8 @@ import {debounceTime} from "rxjs";
     ToolbarComponent,
     ToolbarSpacerDirective,
     DialogTemplateDirective,
-    NavigationBarComponent
+    NavigationBarComponent,
+    AvatarComponent
   ],
   templateUrl: './request-list.component.html',
   styleUrl: './request-list.component.scss'

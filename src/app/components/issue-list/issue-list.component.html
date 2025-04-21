@@ -28,7 +28,7 @@
 <ul fd-list [byline]="true" [unreadIndicator]="true">
   @for (issue of displayedIssues; track $index) {
   <li fd-list-item [unread]="true" aria-description="unread" class="{{issue.status}}" (click)="navigateToTaskList(issue.id)">
-    <span fd-list-thumbnail><fd-icon glyph="task"></fd-icon></span>
+    <fd-avatar size="l" [transparent]="true" ariaLabel="avatar image" glyph='{{getTypeIcon(issue.issueType)}}' title="{{issue.issueType}}">{{issue.issueType}}</fd-avatar>
     <div fd-list-content class="{{issue.status}}">
       <div fd-list-title>{{issue.name}}</div>
       <div fd-list-footer class="{{issue.status}}">{{issue.productManager}}</div>
@@ -77,6 +77,16 @@
                           formControlName="descriptionInput">textarea</textarea>
             </div>
           </div>
+          <div fd-form-item>
+          <label fd-form-label for="input-3">Issue type</label>
+          <input
+            fd-form-control
+            formControlName="issueTypeInput"
+            type="text"
+            id="input-3"
+            autocomplete="off"
+          />
+        </div>
           <div fd-form-item>
             <label fd-form-label for="input-4">Product Manager</label>
             <input
