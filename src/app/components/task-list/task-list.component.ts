@@ -90,7 +90,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
   issueName: string = '';
   todoList: TaskInterface[] = [];
   progressList: TaskInterface[]  = [];
-  testingList: TaskInterface[]  = [];
+  abandonedList: TaskInterface[]  = [];
   doneList: TaskInterface[]  = [];
   selectedTask: TaskInterface | undefined;
 
@@ -127,6 +127,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
       nameInput: new FormControl(''),
       descriptionInput: new FormControl(''),
       typeInput: new FormControl(''),
+      priorityInput: new FormControl(''),
       assigneeInput: new FormControl('')
     });
 
@@ -153,7 +154,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
       this.issueName = issue.name;
       this.todoList = tasks.openTasks
       this.progressList = tasks.inProgressTasks;
-      this.testingList = tasks.abandonedTasks;
+      this.abandonedList = tasks.abandonedTasks;
       this.doneList = tasks.closedTasks;
       this.isLoading = false;
       this._cdr.detectChanges();
@@ -164,7 +165,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
     this.taskService.getAllTasks(this.issueId).subscribe((response) => {
       this.todoList = response.openTasks;
       this.progressList = response.inProgressTasks;
-      this.testingList = response.abandonedTasks;
+      this.abandonedList = response.abandonedTasks;
       this.doneList = response.closedTasks;
       this.isLoading = false;
       this._cdr.detectChanges();
@@ -234,7 +235,8 @@ export class TaskListComponent implements OnInit, OnDestroy {
         name: this.myForm.value.nameInput,
         description: this.myForm.value.descriptionInput,
         assignee: this.myForm.value.assigneeInput,
-        type: this.myForm.value.typeInput
+        type: this.myForm.value.typeInput,
+        priority: this.myForm.value.priorityInput
       };
       console.log(taskRequest);
       this.taskService.addTask(taskRequest, this.issueId).subscribe((task) => {

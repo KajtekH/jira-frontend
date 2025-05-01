@@ -3,4 +3,5 @@ export interface TaskRequest {
   description: string;
   assignee: string;
   type: string;
+  priority: number;
 }
