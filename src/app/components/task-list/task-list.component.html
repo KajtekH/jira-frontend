@@ -34,9 +34,9 @@
           </ul>
         </div>
         <div class="column">
-          <h2>Testing</h2>
-          <ul fd-list cdkDropList [cdkDropListData]="testingList" (cdkDropListDropped)="drop($event)">
-            @for (task of testingList; track $index) {
+          <h2>Abandoned</h2>
+          <ul fd-list cdkDropList [cdkDropListData]="abandonedList" (cdkDropListDropped)="drop($event)">
+            @for (task of abandonedList; track $index) {
               <app-task [task]="task" cdkDrag (cdkDragStarted)="onDragStart()" [cdkDragData]="task"
                         (cdkDragEnded)="onDragEnd($event)" (click)="changeLayout('TwoColumnsStartExpanded', task)"></app-task>
             }
@@ -60,14 +60,13 @@
       [TaskData]="selectedTask"
       (closeTaskDetails)="onLayoutChange()"></app-task-details>
   </ng-template>
-  <ng-template [fdDialogTemplate] let-dialog let-dialogConfig="dialogConfig" #newItemDialog cdkDrag
-               [cdkDragDisabled]="true">
+  <ng-template [fdDialogTemplate] let-dialog let-dialogConfig="dialogConfig" #newItemDialog>
     <fd-dialog [dialogConfig]="dialogConfig" [dialogRef]="dialog">
       <fd-dialog-header>
         <h1 fd-title>New Item</h1>
         <button fd-dialog-close-button (click)="dialog.dismiss('Close button')"></button>
       </fd-dialog-header>
-      <fd-dialog-body class="dialog-container">
+      <fd-dialog-body>
         <form [formGroup]="myForm">
           <div fd-form-set>
             <div fd-form-item>
@@ -84,7 +83,7 @@
               <div class="fd-col">
                 <label class="fd-form-label" for="text-2434-name">Description:</label>
               </div>
-              <div class="fd-col inner">
+              <div class="fd-col">
                 <textarea class="fd-textarea" id="text-2434-name"
                           formControlName="descriptionInput">textarea</textarea>
               </div>
@@ -100,16 +99,25 @@
               />
             </div>
             <div fd-form-item>
-              <label fd-form-label for="input-4">Assignee</label>
+              <label fd-form-label for="input-4">Priority</label>
               <input
                 fd-form-control
-                formControlName="assigneeInput"
-                type="text"
+                formControlName="priorityInput"
+                type="number"
                 id="input-4"
                 autocomplete="off"
               />
             </div>
-
+            <div fd-form-item>
+              <label fd-form-label for="input-5">Assignee</label>
+              <input
+                fd-form-control
+                formControlName="assigneeInput"
+                type="text"
+                id="input-5"
+                autocomplete="off"
+              />
+            </div>
           </div>
         </form>
       </fd-dialog-body>

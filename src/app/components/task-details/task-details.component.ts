@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {
   ButtonComponent, ContentDensityDirective,
   DynamicPageComponent,
@@ -43,14 +43,18 @@ import {MarkdownComponent, MarkdownModule, MarkdownPipe} from "ngx-markdown";
   templateUrl: './task-details.component.html',
   styleUrl: './task-details.component.scss'
 })
-export class TaskDetailsComponent {
+export class TaskDetailsComponent implements OnInit {
   @Input() TaskData: TaskInterface | undefined;
   @Output() closeTaskDetails = new EventEmitter<boolean>();
   dataChanged = false;
 
   constructor(private taskService: TaskService) {
+    console.log("TaskDetailsComponent " + this.TaskData);
   }
 
+  ngOnInit(): void {
+    console.log("details opened: " + this.TaskData);
+  }
 
   changeLayout(): void {
     this.closeTaskDetails.emit();
@@ -64,7 +68,8 @@ export class TaskDetailsComponent {
         name: this.TaskData!.name,
         description: target.value,
         assignee: this.TaskData!.assignee,
-        type: this.TaskData!.type
+        type: this.TaskData!.type,
+        priority: this.TaskData!.priority
       }
       this.TaskData!.description = target.value;
       console.log(target.value);
@@ -81,7 +86,8 @@ export class TaskDetailsComponent {
         name: target.value,
         description: this.TaskData!.description,
         assignee: this.TaskData!.assignee,
-        type: this.TaskData!.type
+        type: this.TaskData!.type,
+        priority: this.TaskData!.priority
       }
       this.TaskData!.name = target.value;
       console.log(target.value);
