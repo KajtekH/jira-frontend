@@ -2,10 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import * as CryptoJS from 'crypto-js';
 import {
   ButtonComponent,
-  ShellbarActionComponent,
   ShellbarActionsComponent, ShellbarComponent,
-  ShellbarLogoComponent,
-  ShellbarSubtitleComponent, ShellbarTitleComponent,
+  ShellbarTitleComponent,
   ShellbarUser,
   ShellbarUserMenu
 } from "@fundamental-ngx/core";
@@ -32,6 +30,7 @@ export class NavigationBarComponent implements  OnInit {
   condensed = true;
   @Input() title = '';
   @Input() productVisible = false;
+  @Input() userListVisible = false;
   @Input() productId = -1;
   @Input() requestId = -1;
 
@@ -45,6 +44,7 @@ export class NavigationBarComponent implements  OnInit {
   };
 
   userMenu: ShellbarUserMenu[] = [{ text: 'Settings'}, { text: 'Sign Out', callback: () => this.onLogout()}];
+  role: string = '';
 
   ngOnInit(): void {
    const encryptedData = localStorage.getItem('user');
@@ -52,9 +52,11 @@ export class NavigationBarComponent implements  OnInit {
       const decryptedData = CryptoJS.AES.decrypt(encryptedData, 'secret-key');
       const decryptedResponse = JSON.parse(decryptedData.toString(CryptoJS.enc.Utf8));
       this.user.fullName = decryptedResponse.firstName + ' ' + decryptedResponse.lastName;
+      this.role = decryptedResponse.role;
     }
     console.log("productId", this.productId);
     console.log("requestId", this.requestId);
+    console.log("role", this.role);
   }
 
   onLogout() {
@@ -74,11 +76,16 @@ export class NavigationBarComponent implements  OnInit {
   navigateToProducts() {
     this.router.navigate(['/product-list']);
   }
+
   navigateToRequests() {
     this.router.navigate(['/request-list/' + this.productId]);
   }
 
   navigateToIssues() {
     this.router.navigate(['/issue-list/' + this.requestId], { state: { productId: this.productId } });
+  }
+
+  navigateToUsers(){
+    this.router.navigate(['/user-list']);
   }
 }

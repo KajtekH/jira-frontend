@@ -20,24 +20,20 @@ import {
   FormControlComponent,
   FormItemComponent,
   FormLabelComponent,
-  IconComponent,
   InputGroupComponent,
   ListBylineDirective, ListBylineLeftDirective,
   ListComponent,
   ListContentDirective,
   ListFooterDirective,
   ListItemComponent,
-  ListThumbnailDirective,
   ListTitleDirective, ScrollbarDirective,
-  TitleComponent, ToolbarComponent, ToolbarLabelDirective, ToolbarSpacerDirective
+  TitleComponent, ToolbarComponent, ToolbarSpacerDirective
 } from "@fundamental-ngx/core";
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ProductInterface} from "../../models/product/product.interface";
 import {Router} from "@angular/router";
-import {RequestService} from "../../services/request-services/request.service";
 import {DialogService} from "@fundamental-ngx/core/dialog";
 import {ProductService} from "../../services/product-services/product.service";
-import {RequestRequestInterface} from "../../models/request/requestRequest.interface";
 import {ProductRequestInterface} from "../../models/product/product-request.interface";
 import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component";
 import {WebSocketService} from "../../services/webSocket/web-socket.service";
@@ -58,14 +54,12 @@ import {DatePipe} from "@angular/common";
     FormControlComponent,
     FormItemComponent,
     FormLabelComponent,
-    IconComponent,
     InputGroupComponent,
     ListBylineDirective,
     ListComponent,
     ListContentDirective,
     ListFooterDirective,
     ListItemComponent,
-    ListThumbnailDirective,
     ListTitleDirective,
     ReactiveFormsModule,
     TitleComponent,
@@ -106,14 +100,14 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy{
       ownerInput: new FormControl('')
     });
 
-    this.webSocketService.taskListUpdates$.subscribe((listId: number) => {
+    this.webSocketService.updates$.subscribe(() => {
       debounceTime(500);
       this.fetchData();
     });
   }
 
   ngOnDestroy(): void {
-    this.webSocketService?.taskListUpdates$.unsubscribe();
+    this.webSocketService?.updates$.unsubscribe();
   }
 
   ngOnChanges(): void {
@@ -136,7 +130,7 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy{
   addProduct(dialog: TemplateRef<any>) {
     const dialogRef = this._dialogService.open(dialog, {responsivePadding: false, resizable: true});
 
-    dialogRef.afterClosed.subscribe((result) => {
+    dialogRef.afterClosed.subscribe(() => {
       this._cdr.detectChanges();
       const productRequest: ProductRequestInterface = {
         name: this.myForm.value.nameInput,

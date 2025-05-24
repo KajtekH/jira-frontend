@@ -22,11 +22,8 @@ import {
   CdkDrag,
   CdkDragDrop,
   CdkDragEnd,
-  CdkDragStart,
   CdkDropList,
   CdkDropListGroup,
-
-  transferArrayItem
 } from "@angular/cdk/drag-drop";
 import {
   FlexibleColumnLayout,
@@ -131,7 +128,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
       assigneeInput: new FormControl('')
     });
 
-    this.webSocketService.taskListUpdates$.subscribe((listId: number) => {
+    this.webSocketService.updates$.subscribe((listId: number) => {
       debounceTime(500);
       if (listId == this.issueId) {
         this.isLoading = true;
@@ -142,7 +139,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.webSocketService?.taskListUpdates$.unsubscribe()
+    this.webSocketService?.updates$.unsubscribe()
   }
 
   fetchData(): void {

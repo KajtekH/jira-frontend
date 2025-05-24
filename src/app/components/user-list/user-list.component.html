@@ -1,0 +1,47 @@
+<app-navigation-bar [title]="'Users:'" [productVisible]="true">
+  <fd-toolbar fdType="transparent" [clearBorder]="true" class="toolbar">
+    <fd-toolbar-spacer></fd-toolbar-spacer>
+    <fd-input-group
+      glyph="decline"
+      glyphAriaLabel="Clear"
+      placeholder="Search"
+      [button]="true"
+      [disabled]="false"
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="handleSearchTermChange($event)"
+      (addOnButtonClicked)="handleSearchTermChange('')"
+    >
+    </fd-input-group>
+  </fd-toolbar>
+  <div>
+    <span></span>
+  </div>
+  <ul fd-list [byline]="true" [unreadIndicator]="true" fd-scrollbar>
+    @for (user of displayedUsers; track $index) {
+      <li fd-list-item [preventClick]="true" [interactive]="false" [unread]="false" aria-description="unread">
+        <fd-avatar size="l" [transparent]="true" glyph="account"></fd-avatar>
+        <div fd-list-content>
+          <div fd-list-title>{{user.username}}</div>
+          <div fd-list-footer>{{user.firstName}}  {{user.lastName}}</div>
+          <div fd-list-byline [twoCol]="true">
+            <div fd-list-byline-left>
+              Role:
+              <fd-combobox
+                [(ngModel)]="this.user.role"
+                [dropdownValues]="roles"
+                (ngModelChange)="onRoleChange(user, $event)">
+              </fd-combobox>
+              <span> &nbsp; &nbsp; &nbsp; </span>
+              Active:
+              <fd-combobox
+                [(ngModel)]="this.user.isActive"
+                [dropdownValues]="activeStatuses"
+                (ngModelChange)="onActiveStatusChange(user, $event)">
+              </fd-combobox>
+            </div>
+          </div>
+        </div>
+      </li>
+    }
+  </ul>
+</app-navigation-bar>
