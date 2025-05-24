@@ -23,8 +23,6 @@ import {
   IconComponent,
   InputGroupComponent,
   ListBylineDirective,
-  ListBylineLeftDirective,
-  ListBylineRightDirective,
   ListComponent,
   ListContentDirective,
   ListFooterDirective,
@@ -33,7 +31,6 @@ import {
   ListTitleDirective,
   TitleComponent,
   ToolbarComponent,
-  ToolbarLabelDirective,
   ToolbarSpacerDirective
 } from "@fundamental-ngx/core";
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
@@ -41,7 +38,6 @@ import {RequestInterface} from "../../models/request/request.interface";
 import {DialogService} from "@fundamental-ngx/core/dialog";
 import {RequestService} from "../../services/request-services/request.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {IssueRequestInterface} from "../../models/issue/issueRequest.interface";
 import {RequestRequestInterface} from "../../models/request/requestRequest.interface";
 import {ProductService} from "../../services/product-services/product.service";
 import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component";
@@ -63,14 +59,12 @@ import {debounceTime} from "rxjs";
     FormItemComponent,
     FormLabelComponent,
     FormsModule,
-    IconComponent,
     InputGroupComponent,
     ListBylineDirective,
     ListComponent,
     ListContentDirective,
     ListFooterDirective,
     ListItemComponent,
-    ListThumbnailDirective,
     ListTitleDirective,
     ReactiveFormsModule,
     TitleComponent,
@@ -118,7 +112,7 @@ export class RequestListComponent implements OnInit, OnChanges, OnDestroy{
       requestTypeInput: new FormControl(''),
       accountManagerInput: new FormControl('')
     });
-    this.webSocketService.taskListUpdates$.subscribe((listId: number) => {
+    this.webSocketService.updates$.subscribe((listId: number) => {
       debounceTime(500);
       if (listId == this.productId) {
         this.updateData();
@@ -127,7 +121,7 @@ export class RequestListComponent implements OnInit, OnChanges, OnDestroy{
   }
 
   ngOnDestroy(): void {
-    this.webSocketService?.taskListUpdates$.unsubscribe();
+    this.webSocketService?.updates$.unsubscribe();
   }
 
   ngOnChanges() {

@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class WebSocketService {
   private stompClient: Client | undefined;
-  public taskListUpdates$ = new Subject<number>();
+  public updates$ = new Subject<number>();
   private topic = '';
 
 
@@ -29,7 +29,7 @@ export class WebSocketService {
   private subscribeToUpdates() {
     this.stompClient?.subscribe(this.topic, message => {
       const listId = JSON.parse(message.body);
-      this.taskListUpdates$.next(listId);
+      this.updates$.next(listId);
     });
   }
 }

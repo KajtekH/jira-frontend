@@ -35,7 +35,6 @@ import {
   ListTitleDirective,
   TitleComponent,
   ToolbarComponent, ToolbarItemDirective,
-  ToolbarLabelDirective,
   ToolbarSpacerDirective
 } from "@fundamental-ngx/core";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -56,13 +55,11 @@ import {DatePipe} from "@angular/common";
   imports: [
     ListComponent,
     ListItemComponent,
-    ListThumbnailDirective,
     ListContentDirective,
     ListTitleDirective,
     ListBylineDirective,
     ListBylineLeftDirective,
     ListBylineRightDirective,
-    IconComponent,
     ListFooterDirective,
     ButtonComponent,
     ToolbarComponent,
@@ -129,7 +126,7 @@ export class IssueListComponent implements OnInit, OnChanges, OnDestroy {
       productManagerInput: new FormControl('')
     });
     console.log(this.productId);
-    this.webSocketService.taskListUpdates$.subscribe((listId: number) => {
+    this.webSocketService.updates$.subscribe((listId: number) => {
       debounceTime(500);
       if (listId == this.requestId) {
         this.updateData();
@@ -138,7 +135,7 @@ export class IssueListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.webSocketService?.taskListUpdates$.unsubscribe();
+    this.webSocketService?.updates$.unsubscribe();
   }
 
   ngOnChanges(): void {
