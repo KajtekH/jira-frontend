@@ -153,7 +153,16 @@ export class RequestListComponent implements OnInit, OnChanges, OnDestroy{
   }
 
   addRequest(dialog: TemplateRef<any>) {
-    const dialogRef = this._dialogService.open(dialog, {responsivePadding: false, resizable: true});
+    const dialogRef = this._dialogService.open(dialog, {
+      responsivePadding: false,
+      resizable: true,
+      width: '800px',
+      minWidth: '600px',
+      maxWidth: '1000px',
+      minHeight: '400px',
+      height: '500px',
+      draggable: true
+    });
 
     dialogRef.afterClosed.subscribe((result) => {
       this._cdr.detectChanges();
