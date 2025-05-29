@@ -43,7 +43,7 @@
         (click)="openDialog(newItemDialog)"
       ></button>
     <ng-template [fdDialogTemplate] let-dialog let-dialogConfig="dialogConfig"#newItemDialog cdkDrag
-                 [cdkDragDisabled]="true">
+                 [cdkDragDisabled]>
       <fd-dialog [dialogConfig]="dialogConfig" [dialogRef]="dialog">
         <fd-dialog-header>
           <h1 fd-title>Register</h1>

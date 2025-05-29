@@ -18,6 +18,7 @@ import {ToolbarComponent, ToolbarItemDirective, ToolbarSpacerDirective} from '@f
 import {TaskComponent} from "../task/task.component";
 import {TaskInterface} from "../../models/task/task.interface";
 import {MoveTaskRequest} from "../../models/task/moveTaskRequest.interface";
+import {MessageStripAlertService} from "@fundamental-ngx/core/message-strip";
 import {
   CdkDrag,
   CdkDragDrop,
@@ -103,7 +104,8 @@ export class TaskListComponent implements OnInit, OnDestroy {
     private issueService: IssueService,
     private _dialogService: DialogService,
     private _fb: FormBuilder,
-    private _cdr: ChangeDetectorRef,
+              private messageStripAlertService: MessageStripAlertService,
+              private _cdr: ChangeDetectorRef,
               private route: ActivatedRoute,
               private router: Router) {
     const navigation = this.router.getCurrentNavigation();
@@ -208,7 +210,12 @@ export class TaskListComponent implements OnInit, OnDestroy {
   moveTask(id: number, newStatus:  "OPEN" | "IN_PROGRESS" | "ABANDONED" | "CLOSED"): void {
     const taskReq: MoveTaskRequest = {taskId: id, status: newStatus};
     console.log(taskReq);
-    this.taskService.moveTask(taskReq).subscribe(() => {});
+    this.taskService.moveTask(taskReq).subscribe(() => {},
+      (error) => {
+        this._cdr.detectChanges();
+        this.showErrorMessage(error.error.message);
+      }
+    );
   }
 
   changeLayout(newValue: FlexibleColumnLayout, task: TaskInterface) {
@@ -247,9 +254,28 @@ export class TaskListComponent implements OnInit, OnDestroy {
       console.log(taskRequest);
       this.taskService.addTask(taskRequest, this.issueId).subscribe((task) => {
         this.fetchData();
-      });
-    }, (error) => {
-      this._cdr.detectChanges();
+      }, (error) => {
+        this._cdr.detectChanges();
+        this.showErrorMessage(error.error.message);
+      }
+      );
+    });
+  }
+
+  showErrorMessage(message: string): void {
+    this.messageStripAlertService.open({
+      content: message,
+      position: `top-middle`,
+      closeOnNavigation: true,
+      messageStrip: {
+        duration: 2000,
+        mousePersist: true,
+        type: 'error',
+        dismissible: true,
+        onDismiss: () => {
+          console.log('dismissed');
+        }
+      }
     });
   }
 }
