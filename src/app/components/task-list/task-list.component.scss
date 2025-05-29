@@ -62,3 +62,42 @@ ul.cdk-drop-list-dragging {
   transition: background-color 0.3s ease, border 0.3s ease;
 }
 
+.resizable-textarea {
+  width: 100% !important;
+  height: 300px !important;
+  min-height: 150px !important;
+  flex-grow: 1 !important;
+  box-sizing: border-box !important;
+  resize: none; // Wyłączamy standardowy resize, bo kontrolujemy go przez dialog
+}
+
+::ng-deep .fd-dialog__body {
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+}
+
+.full-width {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex-grow: 1;
+}
+
+::ng-deep fd-form-item.full-width {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+::ng-deep .fd-form-item.full-width .fd-textarea {
+  flex: 1 1 auto;
+}
+
+.full-width {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+

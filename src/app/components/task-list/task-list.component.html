@@ -68,7 +68,7 @@
       </fd-dialog-header>
       <fd-dialog-body>
         <form [formGroup]="myForm">
-          <div fd-form-set>
+          <div fd-form-set class="full-width">
             <div fd-form-item>
               <label fd-form-label for="input-1">Name</label>
               <input
@@ -79,14 +79,10 @@
                 autocomplete="off"
               />
             </div>
-            <div class="fd-row fd-form-item">
-              <div class="fd-col">
-                <label class="fd-form-label" for="text-2434-name">Description:</label>
-              </div>
-              <div class="fd-col">
-                <textarea class="fd-textarea" id="text-2434-name"
-                          formControlName="descriptionInput">textarea</textarea>
-              </div>
+            <div fd-form-item class="full-width">
+              <label fd-form-label for="description">Description:</label>
+              <textarea class="fd-textarea resizable-textarea" id="description"
+                        formControlName="descriptionInput"></textarea>
             </div>
             <div fd-form-item>
               <label fd-form-label for="input-3">Type</label>

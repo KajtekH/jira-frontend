@@ -128,7 +128,16 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy{
   }
 
   addProduct(dialog: TemplateRef<any>) {
-    const dialogRef = this._dialogService.open(dialog, {responsivePadding: false, resizable: true});
+    const dialogRef = this._dialogService.open(dialog, {
+      responsivePadding: false,
+      resizable: true,
+      width: '800px',
+      minWidth: '600px',
+      maxWidth: '1000px',
+      minHeight: '400px',
+      height: '500px',
+      draggable: true
+    });
 
     dialogRef.afterClosed.subscribe(() => {
       this._cdr.detectChanges();
