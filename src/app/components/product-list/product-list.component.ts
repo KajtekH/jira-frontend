@@ -41,6 +41,7 @@ import {WebSocketService} from "../../services/webSocket/web-socket.service";
 import {debounceTime} from "rxjs";
 import {DatePipe} from "@angular/common";
 import {HoverDetailsComponent} from "../hover-details/hover-details.component";
+import {MessageStripAlertService} from "@fundamental-ngx/core/message-strip";
 
 @Component({
   selector: 'app-product-list',
@@ -92,6 +93,7 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy{
               private productService: ProductService,
               private _fb: FormBuilder,
               private _cdr: ChangeDetectorRef,
+              private messageStripAlertService: MessageStripAlertService,
               private _dialogService: DialogService) { }
 
   ngOnInit(): void {
@@ -154,13 +156,31 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy{
       this.productService.addProduct(productRequest).subscribe((product) => {
         this.fetchData();
         this._cdr.detectChanges();
+      }, (error) => {
+        this._cdr.detectChanges();
+        this.showErrorMessage(error.error.message);
       });
-    }, (error) => {
-      this._cdr.detectChanges();
-    });
+    })
   }
 
   navigateToRequestList(id: number) {
     this.router.navigate(['request-list', id]);
+  }
+
+  showErrorMessage(message: string): void {
+    this.messageStripAlertService.open({
+      content: message,
+      position: `top-middle`,
+      closeOnNavigation: true,
+      messageStrip: {
+        duration: 2000,
+        mousePersist: true,
+        type: 'error',
+        dismissible: true,
+        onDismiss: () => {
+          console.log('dismissed');
+        }
+      }
+    });
   }
 }

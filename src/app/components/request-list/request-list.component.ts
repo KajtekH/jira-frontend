@@ -44,6 +44,7 @@ import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component
 import {WebSocketService} from "../../services/webSocket/web-socket.service";
 import {debounceTime} from "rxjs";
 import {HoverDetailsComponent} from "../hover-details/hover-details.component";
+import {MessageStripAlertService} from "@fundamental-ngx/core/message-strip";
 
 
 @Component({
@@ -97,7 +98,8 @@ export class RequestListComponent implements OnInit, OnChanges, OnDestroy{
               private _fb: FormBuilder,
               private _cdr: ChangeDetectorRef,
               private _dialogService: DialogService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private messageStripAlertService: MessageStripAlertService) {
 
 
   }
@@ -179,9 +181,10 @@ export class RequestListComponent implements OnInit, OnChanges, OnDestroy{
       this.requestService.addRequest(requestRequest, this.productId).subscribe((request) => {
         this.fetchData();
         this._cdr.detectChanges();
+      }, (error) => {
+        this._cdr.detectChanges();
+        this.showErrorMessage(error.error.message);
       });
-    }, (error) => {
-      this._cdr.detectChanges();
     });
   }
 
@@ -193,6 +196,9 @@ export class RequestListComponent implements OnInit, OnChanges, OnDestroy{
    this.requestService.closeRequest(id).subscribe(() => {
      this.fetchData();
      this._cdr.detectChanges();
+   }, (error) => {
+     this._cdr.detectChanges();
+     this.showErrorMessage(error.error.message);
    });
   }
 
@@ -200,6 +206,9 @@ export class RequestListComponent implements OnInit, OnChanges, OnDestroy{
     this.requestService.abandonRequest(id).subscribe(() => {
       this.fetchData();
       this._cdr.detectChanges();
+    }, (error) => {
+      this._cdr.detectChanges();
+      this.showErrorMessage(error.error.message);
     });
   }
 
@@ -213,5 +222,22 @@ export class RequestListComponent implements OnInit, OnChanges, OnDestroy{
       return 'drill-up';
     }
     return 'navigation-up-arrow';
+  }
+
+  showErrorMessage(message: string): void {
+    this.messageStripAlertService.open({
+      content: message,
+      position: `top-middle`,
+      closeOnNavigation: true,
+      messageStrip: {
+        duration: 2000,
+        mousePersist: true,
+        type: 'error',
+        dismissible: true,
+        onDismiss: () => {
+          console.log('dismissed');
+        }
+      }
+    });
   }
 }

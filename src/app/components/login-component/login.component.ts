@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import * as CryptoJS from 'crypto-js';
 import {
   ButtonBarComponent, ButtonComponent,
@@ -16,9 +16,9 @@ import {CdkDrag} from "@angular/cdk/drag-drop";
 import {LoginRequest} from "../../models/auth/login-request";
 import {AuthService} from "../../services/auth-services/auth.service";
 import {Router} from "@angular/router";
-import {TaskRequest} from "../../models/task/taskRequest.interface";
 import {DialogService} from "@fundamental-ngx/core/dialog";
 import {RegisterRequest} from "../../models/auth/register-request";
+import {MessageStripAlertService} from "@fundamental-ngx/core/message-strip";
 
 @Component({
   selector: 'app-login-component',
@@ -52,7 +52,9 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService,
               private _fb: FormBuilder,
               private _fb2: FormBuilder,
+              private _cdr: ChangeDetectorRef,
               private router: Router,
+              private messageStripAlertService: MessageStripAlertService,
               private _dialogService: DialogService) {
   }
 
@@ -89,9 +91,10 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/product-list']);
       },
       (error) => {
-        console.error('Login failed:', error);
-      }
-    );
+        this._cdr.detectChanges();
+        console.log('Login failed:', error);
+        this.showErrorMessage("Invalid username or password");
+      });
   }
 
   openDialog(dialog: TemplateRef<any>): void {
@@ -107,16 +110,35 @@ export class LoginComponent implements OnInit {
       };
       console.log(registerRequest);
       if (registerRequest.password  !== this.registerForm.get('confirmPasswordInput')?.value) {
+        this._cdr.detectChanges();
         console.log(registerRequest.password);
         console.log(this.registerForm.get('confirmPasswordInput')?.value);
-        console.log('Passwords do not match');
+       this.showErrorMessage('Passwords do not match');
         return;
       }
       this.authService.register(registerRequest).subscribe((response) => {
         console.log('Registration successful:', response);
+      }, (error) => {
+        this._cdr.detectChanges();
+        this.showErrorMessage(error.error.message);
       });
-    }, (error) => {
-      console.error('Dialog closed with error:', error);
+    });
+  }
+
+  showErrorMessage(message: string): void {
+    this.messageStripAlertService.open({
+      content: message,
+      position: `bottom-middle`,
+      closeOnNavigation: true,
+      messageStrip: {
+        duration: 2000,
+        mousePersist: true,
+        type: 'error',
+        dismissible: true,
+        onDismiss: () => {
+          console.log('dismissed');
+        }
+      }
     });
   }
 }

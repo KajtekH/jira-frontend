@@ -49,6 +49,7 @@ import {WebSocketService} from "../../services/webSocket/web-socket.service";
 import {debounceTime} from "rxjs";
 import {DatePipe} from "@angular/common";
 import {HoverDetailsComponent} from "../hover-details/hover-details.component";
+import {MessageStripAlertService} from "@fundamental-ngx/core/message-strip";
 
 @Component({
   selector: 'app-issue-list',
@@ -106,6 +107,7 @@ export class IssueListComponent implements OnInit, OnChanges, OnDestroy {
               private _cdr: ChangeDetectorRef,
               private _dialogService: DialogService,
               private _fb: FormBuilder,
+              private messageStripAlertService: MessageStripAlertService,
               private route: ActivatedRoute) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
@@ -172,14 +174,22 @@ export class IssueListComponent implements OnInit, OnChanges, OnDestroy {
     this.issueService.abandonIssue(issueId).subscribe(() => {
       this.fetchData();
       this._cdr.detectChanges();
-    });
+    }, (error) => {
+        this._cdr.detectChanges();
+        this.showErrorMessage(error.error.message);
+      }
+    );
   }
 
   closeIssue(issueId: number): void {
     this.issueService.closeIssue(issueId).subscribe(() => {
       this.fetchData();
       this._cdr.detectChanges();
-    });
+    }, (error) => {
+        this._cdr.detectChanges();
+        this.showErrorMessage(error.error.message);
+      }
+    );
   }
 
   protected handleSearchTermChange(searchTerm: string): void {
@@ -213,9 +223,11 @@ export class IssueListComponent implements OnInit, OnChanges, OnDestroy {
       this.issueService.addIssue(issueRequest, this.requestId).subscribe((issue) => {
         this.fetchData();
         this._cdr.detectChanges();
-      });
-    }, (error) => {
-      this._cdr.detectChanges();
+      }, (error) => {
+          this._cdr.detectChanges();
+          this.showErrorMessage(error.error.message);
+        }
+      );
     });
   }
 
@@ -232,5 +244,22 @@ export class IssueListComponent implements OnInit, OnChanges, OnDestroy {
       default:
         return 'lab';
     }
+  }
+
+  showErrorMessage(message: string): void {
+    this.messageStripAlertService.open({
+      content: message,
+      position: `top-middle`,
+      closeOnNavigation: true,
+      messageStrip: {
+        duration: 2000,
+        mousePersist: true,
+        type: 'error',
+        dismissible: true,
+        onDismiss: () => {
+          console.log('dismissed');
+        }
+      }
+    });
   }
 }
