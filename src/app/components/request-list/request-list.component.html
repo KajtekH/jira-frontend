@@ -26,7 +26,11 @@
     <li fd-list-item [unread]="true" aria-description="unread" class="{{request.status}} item" (click)="navigateToIssueList(request.id)">
       <fd-avatar size="l" [transparent]="true" glyph="{{this.getTypeIcon(request)}}" ariaLabel="avatar image" title="{{this.request.requestType}}">{{this.request.requestType}}</fd-avatar>
       <div fd-list-content class="{{request.status}}">
-        <div fd-list-title>{{request.name}}</div>
+        <div fd-list-title>
+          <app-hover-details [details]="request" detailsType="request" [title]="request.name" class="details">
+            {{ request.name }}
+          </app-hover-details>
+        </div>
         <div fd-list-footer class="{{request.status}}">{{request.accountManager}}</div>
         <div fd-list-byline [twoCol]="false">{{request.description}}</div>
       </div>

@@ -38,11 +38,11 @@ h2 {
 
 ul {
   background-color: #f9f9f9;
-  height: 83vh; /* Set the maximum height */
-  overflow-y: auto; /* Add scroll if content overflows */
+  height: 83vh;
+  overflow-y: auto;
   border: hidden;
   border-radius: 30px;
-  padding: 30px; /* Optional: Add padding */
+  padding: 30px;
 }
 
 ul.dragging {
@@ -68,7 +68,7 @@ ul.cdk-drop-list-dragging {
   min-height: 150px !important;
   flex-grow: 1 !important;
   box-sizing: border-box !important;
-  resize: none; // Wyłączamy standardowy resize, bo kontrolujemy go przez dialog
+  resize: none;
 }
 
 ::ng-deep .fd-dialog__body {

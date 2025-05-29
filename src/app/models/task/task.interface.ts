@@ -8,4 +8,5 @@ export interface TaskInterface {
   status: 'TO_DO' | 'IN_PROGRESS' | 'TESTING' | 'DONE';
   assignee: string;
   priority: number;
+  result: string;
 }

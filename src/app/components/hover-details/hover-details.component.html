@@ -1,0 +1,40 @@
+<!-- hover-details.component.html -->
+<div class="hover-details-wrapper">
+  <fd-popover [triggers]="[]" #popover>
+    <fd-popover-control (mouseenter)="openPopover(popover)" (mouseleave)="startCloseTimer(popover)">
+      <ng-content></ng-content>
+    </fd-popover-control>
+    <fd-popover-body (mouseenter)="cancelCloseTimer()" (mouseleave)="startCloseTimer(popover)">
+      <div class="details-container">
+        <h4 *ngIf="title">{{ title }}</h4>
+        <div class="details-content">
+          <ng-container [ngSwitch]="detailsType">
+            <div *ngSwitchCase="'product'" class="product-details">
+              <p><strong>Name:</strong> {{ details?.name }}</p>
+              <p><strong>Description:</strong> {{ details?.description }}</p>
+              <p><strong>Owner:</strong> {{ details?.owner }}</p>
+              <p *ngIf="details?.version"><strong>Version:</strong> {{ details?.version }}</p>
+              <p *ngIf="details?.releaseDate"><strong>Release date:</strong> {{ details?.releaseDate | date:'dd MMM yyyy HH:mm' }}</p>
+            </div>
+            <div *ngSwitchCase="'request'" class="request-details">
+              <p><strong>Name:</strong> {{ details?.name }}</p>
+              <p><strong>Description:</strong> {{ details?.description }}</p>
+              <p><strong>Status:</strong> {{ details?.status }}</p>
+              <p *ngIf="details?.requestType"><strong>Type:</strong> {{ details?.requestType }}</p>
+            </div>
+            <div *ngSwitchCase="'issue'" class="issue-details">
+              <p><strong>Name:</strong> {{ details?.name }}</p>
+              <p><strong>Description:</strong> {{ details?.description }}</p>
+              <p><strong>Status:</strong> {{ details?.status }}</p>
+            </div>
+            <div *ngSwitchDefault class="general-details">
+              <p *ngFor="let item of detailsItems">
+                <strong>{{ item.label }}:</strong> {{ item.value }}
+              </p>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </fd-popover-body>
+  </fd-popover>
+</div>

@@ -43,6 +43,8 @@ import {ProductService} from "../../services/product-services/product.service";
 import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component";
 import {WebSocketService} from "../../services/webSocket/web-socket.service";
 import {debounceTime} from "rxjs";
+import {HoverDetailsComponent} from "../hover-details/hover-details.component";
+
 
 @Component({
   selector: 'app-request-list',
@@ -72,7 +74,8 @@ import {debounceTime} from "rxjs";
     ToolbarSpacerDirective,
     DialogTemplateDirective,
     NavigationBarComponent,
-    AvatarComponent
+    AvatarComponent,
+    HoverDetailsComponent
   ],
   templateUrl: './request-list.component.html',
   styleUrl: './request-list.component.scss'

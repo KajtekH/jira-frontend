@@ -1,0 +1,38 @@
+.hover-details-wrapper {
+  display: block;
+  width: 100%;
+}
+
+.details-container {
+  padding: 10px;
+  max-width: 300px;
+  max-height: none;
+  overflow-y: visible;
+}
+
+.details-content {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #ccc;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1;
+}
+
+.details-content p {
+  margin: 5px 0;
+  word-wrap: break-word;
+  white-space: pre-line;
+}
+
+.product-details p,
+.request-details p {
+  max-width: 280px;
+}

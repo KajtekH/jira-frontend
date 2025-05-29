@@ -30,7 +30,11 @@
   <li fd-list-item [unread]="true" aria-description="unread" class="{{issue.status}}" (click)="navigateToTaskList(issue.id)">
     <fd-avatar size="l" [transparent]="true" ariaLabel="avatar image" glyph='{{getTypeIcon(issue.issueType)}}' title="{{issue.issueType}}">{{issue.issueType}}</fd-avatar>
     <div fd-list-content class="{{issue.status}}">
-      <div fd-list-title>{{issue.name}}</div>
+      <div fd-list-title>
+        <app-hover-details [details]="issue" detailsType="issue" [title]="issue.name" class="details">
+          {{ issue.name }}
+        </app-hover-details>
+      </div>
       <div fd-list-footer class="{{issue.status}}">{{issue.productManager}}</div>
       <div fd-list-byline [twoCol]="true">
         @if(issue.closeDate){
