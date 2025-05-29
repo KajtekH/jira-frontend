@@ -29,7 +29,11 @@
       <li fd-list-item [unread]="true" aria-description="unread" (click)="navigateToRequestList(product.id)">
         <fd-avatar size="l" [transparent]="true" glyph="product"></fd-avatar>
         <div fd-list-content>
-          <div fd-list-title>{{ product.name }}</div>
+          <div fd-list-title>
+            <app-hover-details [details]="product" detailsType="product" [title]="product.name" class="details">
+              {{ product.name }}
+            </app-hover-details>
+          </div>
           <div fd-list-footer>{{ product.owner }}</div>
           <div fd-list-byline [twoCol]="true">
             @if (product.releaseDate) {
@@ -42,6 +46,7 @@
           </div>
         </div>
       </li>
+
     }
   </ul>
   <ng-template [fdDialogTemplate] let-dialog let-dialogConfig="dialogConfig" #newIssueDialog>
@@ -73,7 +78,7 @@
               </div>
             </div>
             <div fd-form-item>
-              <label fd-form-label for="input-5">Account Manager</label>
+              <label fd-form-label for="input-5">Product owner</label>
               <input
                 fd-form-control
                 formControlName="ownerInput"

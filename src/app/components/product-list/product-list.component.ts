@@ -9,6 +9,7 @@ import {
   ViewChild
 } from '@angular/core';
 import {
+  PopoverModule,
   AvatarComponent,
   ButtonBarComponent,
   ButtonComponent,
@@ -39,6 +40,7 @@ import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component
 import {WebSocketService} from "../../services/webSocket/web-socket.service";
 import {debounceTime} from "rxjs";
 import {DatePipe} from "@angular/common";
+import {HoverDetailsComponent} from "../hover-details/hover-details.component";
 
 @Component({
   selector: 'app-product-list',
@@ -50,6 +52,7 @@ import {DatePipe} from "@angular/common";
     DialogCloseButtonComponent,
     DialogComponent,
     DialogFooterComponent,
+    PopoverModule,
     DialogHeaderComponent,
     FormControlComponent,
     FormItemComponent,
@@ -71,7 +74,8 @@ import {DatePipe} from "@angular/common";
     NavigationBarComponent,
     ScrollbarDirective,
     DatePipe,
-    AvatarComponent
+    AvatarComponent,
+    HoverDetailsComponent
   ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss'

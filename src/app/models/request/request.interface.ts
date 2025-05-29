@@ -5,4 +5,5 @@ export interface RequestInterface {
   status: "OPEN" | "CLOSED" | "ABANDONED";
   requestType: 'PATCH' | 'MINOR' | 'MAJOR';
   accountManager: string;
+  result: string;
 }

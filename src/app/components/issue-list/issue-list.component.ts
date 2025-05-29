@@ -48,6 +48,7 @@ import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component
 import {WebSocketService} from "../../services/webSocket/web-socket.service";
 import {debounceTime} from "rxjs";
 import {DatePipe} from "@angular/common";
+import {HoverDetailsComponent} from "../hover-details/hover-details.component";
 
 @Component({
   selector: 'app-issue-list',
@@ -82,6 +83,7 @@ import {DatePipe} from "@angular/common";
     ToolbarItemDirective,
     DatePipe,
     AvatarComponent,
+    HoverDetailsComponent,
   ],
   templateUrl: './issue-list.component.html',
   styleUrl: './issue-list.component.scss'

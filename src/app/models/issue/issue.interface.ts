@@ -9,4 +9,5 @@ export interface IssueInterface {
   productManager: string;
   tasksCount: number;
   doneTasksCount: number;
+  result: string;
 }
