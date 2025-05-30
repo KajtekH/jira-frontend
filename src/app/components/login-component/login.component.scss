@@ -1,17 +1,26 @@
-.center-form-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh; /* Full viewport height */
+::ng-deep .fd-message-strip-alert,
+::ng-deep [class*="message-strip-alert"] {
+  position: fixed !important;
+  left: 50% !important;
+  top: 30px !important;
+  transform: translateX(-50%) !important;
+  z-index: 9999 !important;
+  margin: 0 !important;
+  right: auto !important;
 }
 
 .center-form {
-  width: 100%;
-  max-width: 400px; /* Adjust the max-width as needed */
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  padding: 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  background-color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .full-width-button {

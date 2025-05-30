@@ -20,12 +20,14 @@
               <p><strong>Name:</strong> {{ details?.name }}</p>
               <p><strong>Description:</strong> {{ details?.description }}</p>
               <p><strong>Status:</strong> {{ details?.status }}</p>
+              <p *ngIf="details?.result"><strong>Result:</strong> {{ details?.result }}</p>
               <p *ngIf="details?.requestType"><strong>Type:</strong> {{ details?.requestType }}</p>
             </div>
             <div *ngSwitchCase="'issue'" class="issue-details">
               <p><strong>Name:</strong> {{ details?.name }}</p>
               <p><strong>Description:</strong> {{ details?.description }}</p>
               <p><strong>Status:</strong> {{ details?.status }}</p>
+              <p *ngIf="details?.result"><strong>Result:</strong> {{ details?.result }}</p>
             </div>
             <div *ngSwitchDefault class="general-details">
               <p *ngFor="let item of detailsItems">
