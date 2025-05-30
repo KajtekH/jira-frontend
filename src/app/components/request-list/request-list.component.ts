@@ -89,6 +89,7 @@ export class RequestListComponent implements OnInit, OnChanges, OnDestroy{
   productId: number = -1;
   productName: string = '';
   myForm!: FormGroup;
+  resultForm!: FormGroup;
   @ViewChild('overlay')
   overlay: ElementRef<HTMLElement> | undefined;
 
@@ -116,6 +117,9 @@ export class RequestListComponent implements OnInit, OnChanges, OnDestroy{
       descriptionInput: new FormControl(''),
       requestTypeInput: new FormControl(''),
       accountManagerInput: new FormControl('')
+    });
+    this.resultForm = this._fb.group({
+      resultInput: new FormControl('')
     });
     this.webSocketService.updates$.subscribe((listId: number) => {
       debounceTime(500);
@@ -192,26 +196,6 @@ export class RequestListComponent implements OnInit, OnChanges, OnDestroy{
     this.router.navigate(['/issue-list', id], { state: { productId: this.productId } });
   }
 
-  closeRequest(id: number) {
-   this.requestService.closeRequest(id).subscribe(() => {
-     this.fetchData();
-     this._cdr.detectChanges();
-   }, (error) => {
-     this._cdr.detectChanges();
-     this.showErrorMessage(error.error.message);
-   });
-  }
-
-  abandonRequest(id: number) {
-    this.requestService.abandonRequest(id).subscribe(() => {
-      this.fetchData();
-      this._cdr.detectChanges();
-    }, (error) => {
-      this._cdr.detectChanges();
-      this.showErrorMessage(error.error.message);
-    });
-  }
-
   getTypeIcon(request: RequestInterface): string {
     if (request.requestType === 'PATCH') {
       return 'navigation-up-arrow';
@@ -237,6 +221,54 @@ export class RequestListComponent implements OnInit, OnChanges, OnDestroy{
         onDismiss: () => {
           console.log('dismissed');
         }
+      }
+    });
+  }
+
+  closeRequest(id: number, dialog: TemplateRef<any>) {
+    const dialogRef = this._dialogService.open(dialog, {
+      responsivePadding: true,
+      width: '500px',
+      minHeight: '200px',
+      draggable: true
+    });
+
+    dialogRef.afterClosed.subscribe((result) => {
+      if (result === 'apply') {
+        const comment = this.resultForm.value.resultInput;
+        console.log(comment);
+        this.requestService.closeRequest(id, comment).subscribe(() => {
+          this.fetchData();
+          this._cdr.detectChanges();
+          this.resultForm.reset();
+        }, (error) => {
+          this._cdr.detectChanges();
+          this.showErrorMessage(error.error.message);
+        });
+      }
+    });
+  }
+
+  abandonRequest(id: number, dialog: TemplateRef<any>) {
+    const dialogRef = this._dialogService.open(dialog, {
+      responsivePadding: true,
+      width: '500px',
+      minHeight: '200px',
+      draggable: true
+    });
+
+    dialogRef.afterClosed.subscribe((result) => {
+      if (result === 'apply') {
+        const comment = this.resultForm.value.resultInput;
+        console.log(comment);
+        this.requestService.abandonRequest(id, comment).subscribe(() => {
+          this.fetchData();
+          this._cdr.detectChanges();
+          this.resultForm.reset();
+        }, (error) => {
+          this._cdr.detectChanges();
+          this.showErrorMessage(error.error.message);
+        });
       }
     });
   }

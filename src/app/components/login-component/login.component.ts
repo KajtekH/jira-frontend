@@ -9,7 +9,7 @@ import {
   DialogHeaderComponent, DialogTemplateDirective,
   FormControlComponent,
   FormItemComponent,
-  FormLabelComponent, TitleComponent, ToolbarItemDirective
+  FormLabelComponent, MessageStripComponent, MessageStripModule, TitleComponent, ToolbarItemDirective
 } from "@fundamental-ngx/core";
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {CdkDrag} from "@angular/cdk/drag-drop";
@@ -41,7 +41,7 @@ import {MessageStripAlertService} from "@fundamental-ngx/core/message-strip";
     DialogTemplateDirective
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
@@ -128,7 +128,7 @@ export class LoginComponent implements OnInit {
   showErrorMessage(message: string): void {
     this.messageStripAlertService.open({
       content: message,
-      position: `bottom-middle`,
+      position: `top-middle`,
       closeOnNavigation: true,
       messageStrip: {
         duration: 2000,

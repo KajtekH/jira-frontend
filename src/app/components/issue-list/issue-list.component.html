@@ -47,8 +47,8 @@
       </div>
     </div>
     @if(issue.status === 'OPEN'){
-    <button fd-button fdType="transparent" glyph="accept" (click)="closeIssue(issue.id); $event.stopPropagation()" title="close"></button>
-    <button fd-button fdType="transparent" glyph="sys-cancel-2" (click)="abandonIssue(issue.id); $event.stopPropagation()" title="abandon"></button>
+    <button fd-button fdType="transparent" glyph="accept" (click)="closeIssue(issue.id, resultFormDialog); $event.stopPropagation()" title="close"></button>
+    <button fd-button fdType="transparent" glyph="sys-cancel-2" (click)="abandonIssue(issue.id, resultFormDialog); $event.stopPropagation()" title="abandon"></button>
     }
   </li>
   }
@@ -111,4 +111,33 @@
     </fd-dialog-footer>
   </fd-dialog>
 </ng-template>
+  <ng-template [fdDialogTemplate] let-dialog let-dialogConfig="dialogConfig" #resultFormDialog>
+    <form [formGroup]="resultForm">
+      <fd-dialog [dialogConfig]="dialogConfig" [dialogRef]="dialog">
+        <fd-dialog-header>
+          <h1 fd-title>Close Request</h1>
+          <button fd-dialog-close-button (click)="dialog.dismiss('Close button')"></button>
+        </fd-dialog-header>
+        <fd-dialog-body>
+          <div fd-form-set>
+            <div fd-form-item>
+              <label fd-form-label for="input-1">Result</label>
+              <input
+                fd-form-control
+                formControlName="resultInput"
+                type="text"
+                id="input-1"
+                autocomplete="off"
+              />
+            </div>
+          </div>
+        </fd-dialog-body>
+        <fd-dialog-footer>
+          <fd-button-bar fdType="emphasized" label="Save" type="submit" (click)="dialog.close('apply')">
+          </fd-button-bar>
+          <fd-button-bar label="Cancel" (click)="dialog.dismiss('Cancel')"></fd-button-bar>
+        </fd-dialog-footer>
+      </fd-dialog>
+    </form>
+  </ng-template>
 </app-navigation-bar>

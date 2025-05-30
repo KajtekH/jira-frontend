@@ -98,6 +98,7 @@ export class IssueListComponent implements OnInit, OnChanges, OnDestroy {
   requestId: number = -1;
   requestName: string = '';
   myForm!: FormGroup;
+  resultForm!: FormGroup;
   @ViewChild('overlay')
   overlay: ElementRef<HTMLElement> | undefined;
 
@@ -129,7 +130,9 @@ export class IssueListComponent implements OnInit, OnChanges, OnDestroy {
       issueTypeInput: new FormControl(''),
       productManagerInput: new FormControl('')
     });
-    console.log(this.productId);
+    this.resultForm = this._fb.group({
+      resultInput: new FormControl('')
+    });    console.log(this.productId);
     this.webSocketService.updates$.subscribe((listId: number) => {
       debounceTime(500);
       if (listId == this.requestId) {
@@ -170,27 +173,6 @@ export class IssueListComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  abandonIssue(issueId: number): void {
-    this.issueService.abandonIssue(issueId).subscribe(() => {
-      this.fetchData();
-      this._cdr.detectChanges();
-    }, (error) => {
-        this._cdr.detectChanges();
-        this.showErrorMessage(error.error.message);
-      }
-    );
-  }
-
-  closeIssue(issueId: number): void {
-    this.issueService.closeIssue(issueId).subscribe(() => {
-      this.fetchData();
-      this._cdr.detectChanges();
-    }, (error) => {
-        this._cdr.detectChanges();
-        this.showErrorMessage(error.error.message);
-      }
-    );
-  }
 
   protected handleSearchTermChange(searchTerm: string): void {
     this.searchTerm = searchTerm;
@@ -262,4 +244,54 @@ export class IssueListComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
   }
+
+  abandonIssue(id: number, dialog: TemplateRef<any>) {
+    const dialogRef = this._dialogService.open(dialog, {
+      responsivePadding: true,
+      width: '500px',
+      minHeight: '200px',
+      draggable: true
+    });
+
+    dialogRef.afterClosed.subscribe((result) => {
+      if (result === 'apply') {
+        const comment = this.resultForm.value.resultInput;
+        console.log(comment);
+        this.issueService.abandonIssue(id, comment).subscribe(() => {
+          this.fetchData();
+          this._cdr.detectChanges();
+          this.resultForm.reset();
+        }, (error) => {
+          this._cdr.detectChanges();
+          this.showErrorMessage(error.error.message);
+        });
+      }
+    });
+  }
+
+  closeIssue(id: number, dialog: TemplateRef<any>) {
+    const dialogRef = this._dialogService.open(dialog, {
+      responsivePadding: true,
+      width: '500px',
+      minHeight: '200px',
+      draggable: true
+    });
+
+    dialogRef.afterClosed.subscribe((result) => {
+      if (result === 'apply') {
+        const comment = this.resultForm.value.resultInput;
+        console.log(comment);
+        this.issueService.closeIssue(id, comment).subscribe(() => {
+          this.fetchData();
+          this._cdr.detectChanges();
+          this.resultForm.reset();
+        }, (error) => {
+          this._cdr.detectChanges();
+          this.showErrorMessage(error.error.message);
+        });
+      }
+    });
+  }
+
+
 }

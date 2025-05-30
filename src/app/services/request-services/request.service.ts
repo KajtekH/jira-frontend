@@ -25,11 +25,11 @@ export class RequestService {
     return this.http.post<RequestInterface>(`${this.baseUrl}/${productId}`, requestRequest, {withCredentials: true});
   }
 
-  closeRequest(requestId: number): Observable<any> {
-    return this.http.patch(`${this.baseUrl}/${requestId}/CLOSED`,{}, {withCredentials: true});
+  closeRequest(requestId: number, result: String): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/${requestId}/CLOSED`,result, {withCredentials: true});
   }
 
-  abandonRequest(requestId: number): Observable<any> {
-    return this.http.patch(`${this.baseUrl}/${requestId}/ABANDONED`,{}, {withCredentials: true});
+  abandonRequest(requestId: number, result: String): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/${requestId}/ABANDONED`,result, {withCredentials: true});
   }
 }
