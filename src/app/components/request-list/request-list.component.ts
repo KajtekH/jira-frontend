@@ -11,7 +11,7 @@ import {
 import {
   AvatarComponent,
   ButtonBarComponent,
-  ButtonComponent,
+  ButtonComponent, ComboboxComponent,
   DialogBodyComponent,
   DialogCloseButtonComponent,
   DialogComponent,
@@ -45,6 +45,7 @@ import {WebSocketService} from "../../services/webSocket/web-socket.service";
 import {debounceTime} from "rxjs";
 import {HoverDetailsComponent} from "../hover-details/hover-details.component";
 import {MessageStripAlertService} from "@fundamental-ngx/core/message-strip";
+import {UserService} from "../../services/user-services/user.service";
 
 
 @Component({
@@ -76,7 +77,8 @@ import {MessageStripAlertService} from "@fundamental-ngx/core/message-strip";
     DialogTemplateDirective,
     NavigationBarComponent,
     AvatarComponent,
-    HoverDetailsComponent
+    HoverDetailsComponent,
+    ComboboxComponent
   ],
   templateUrl: './request-list.component.html',
   styleUrl: './request-list.component.scss'
@@ -92,10 +94,13 @@ export class RequestListComponent implements OnInit, OnChanges, OnDestroy{
   resultForm!: FormGroup;
   @ViewChild('overlay')
   overlay: ElementRef<HTMLElement> | undefined;
+  managers: String[] = [];
+  requestTypes: String[] = ['PATCH', 'MINOR', 'MAJOR'];
 
   constructor(private router: Router,
               private requestService: RequestService,
               private productService: ProductService,
+              private userService: UserService,
               private _fb: FormBuilder,
               private _cdr: ChangeDetectorRef,
               private _dialogService: DialogService,
@@ -126,6 +131,10 @@ export class RequestListComponent implements OnInit, OnChanges, OnDestroy{
       if (listId == this.productId) {
         this.updateData();
       }
+    });
+    this.userService.getUsersByRole('ACCOUNT_MANAGER').subscribe((managers: String[]) => {
+      this.managers = managers;
+      this._cdr.detectChanges();
     });
   }
 

@@ -12,7 +12,7 @@ import {IssueInterface} from "../../models/issue/issue.interface";
 import {
   AvatarComponent,
   ButtonBarComponent,
-  ButtonComponent,
+  ButtonComponent, ComboboxComponent,
   DialogBodyComponent,
   DialogCloseButtonComponent,
   DialogComponent,
@@ -50,6 +50,7 @@ import {debounceTime} from "rxjs";
 import {DatePipe} from "@angular/common";
 import {HoverDetailsComponent} from "../hover-details/hover-details.component";
 import {MessageStripAlertService} from "@fundamental-ngx/core/message-strip";
+import {UserService} from "../../services/user-services/user.service";
 
 @Component({
   selector: 'app-issue-list',
@@ -85,6 +86,7 @@ import {MessageStripAlertService} from "@fundamental-ngx/core/message-strip";
     DatePipe,
     AvatarComponent,
     HoverDetailsComponent,
+    ComboboxComponent,
   ],
   templateUrl: './issue-list.component.html',
   styleUrl: './issue-list.component.scss'
@@ -101,10 +103,13 @@ export class IssueListComponent implements OnInit, OnChanges, OnDestroy {
   resultForm!: FormGroup;
   @ViewChild('overlay')
   overlay: ElementRef<HTMLElement> | undefined;
+  managers: String[] = [];
+  issueTypes: string[] = ['ERROR', 'CRITICAL_ERROR', 'CHANGE', 'FEATURE'];
 
   constructor(private router: Router,
               private issueService: IssueService,
               private requestService: RequestService,
+              private userService: UserService,
               private _cdr: ChangeDetectorRef,
               private _dialogService: DialogService,
               private _fb: FormBuilder,
@@ -116,6 +121,10 @@ export class IssueListComponent implements OnInit, OnChanges, OnDestroy {
     }
     this.route.params.subscribe((params) => {
       this.requestId = params['id'];
+    });
+    this.userService.getUsersByRole('PRODUCT_MANAGER').subscribe((managers: String[]) => {
+      this.managers = managers;
+      this._cdr.detectChanges();
     });
   }
 

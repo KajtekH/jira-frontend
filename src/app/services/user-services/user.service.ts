@@ -24,4 +24,8 @@ export class UserService {
     return this.http.patch<any>(`${this.baseUrl}/activation/${userId}/${isActive}`,null , { withCredentials: true });
   }
 
+  getUsersByRole(role: string): Observable<String[]> {
+    return this.http.get<string[]>(`${this.baseUrl}/${role}`, { withCredentials: true });
+  }
+
 }

@@ -83,22 +83,22 @@
           </div>
           <div fd-form-item>
           <label fd-form-label for="input-3">Issue type</label>
-          <input
-            fd-form-control
+          <fd-combobox
             formControlName="issueTypeInput"
             type="text"
             id="input-3"
-            autocomplete="off"
+            [dropdownValues]="issueTypes"
+            placeholder="Select Issue Type"
           />
         </div>
           <div fd-form-item>
             <label fd-form-label for="input-4">Product Manager</label>
-            <input
-              fd-form-control
+            <fd-combobox
               formControlName="productManagerInput"
               type="text"
               id="input-4"
-              autocomplete="off"
+              [dropdownValues]="managers"
+              placeholder="Select Product Manager"
             />
           </div>
         </div>

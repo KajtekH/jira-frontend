@@ -79,12 +79,12 @@
             </div>
             <div fd-form-item>
               <label fd-form-label for="input-5">Product owner</label>
-              <input
-                fd-form-control
+              <fd-combobox
                 formControlName="ownerInput"
                 type="text"
                 id="input-5"
-                autocomplete="off"
+                [dropdownValues]="owners"
+                placeholder="Select Product Owner"
               />
             </div>
           </div>

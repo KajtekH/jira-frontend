@@ -34,7 +34,7 @@ import {
   ButtonComponent,
   FormItemComponent,
   FormLabelComponent,
-  FormControlComponent
+  FormControlComponent, ComboboxComponent
 } from "@fundamental-ngx/core";
 import {TaskDetailsComponent} from "../task-details/task-details.component";
 import {TaskService} from "../../services/task-services/task.service";
@@ -45,6 +45,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {IssueService} from "../../services/issue-services/issue.service";
 import {NavigationBarComponent} from "../navigation-bar/navigation-bar.component";
 import {WebSocketService} from "../../services/webSocket/web-socket.service";
+import {UserService} from "../../services/user-services/user.service";
 
 @Component({
   selector: 'app-task-list',
@@ -78,6 +79,7 @@ import {WebSocketService} from "../../services/webSocket/web-socket.service";
     FormLabelComponent,
     FormControlComponent,
     NavigationBarComponent,
+    ComboboxComponent,
   ]
 })
 export class TaskListComponent implements OnInit, OnDestroy {
@@ -91,6 +93,9 @@ export class TaskListComponent implements OnInit, OnDestroy {
   abandonedList: TaskInterface[]  = [];
   doneList: TaskInterface[]  = [];
   selectedTask: TaskInterface | undefined;
+  workers: String[] = [];
+  taskTypes: String[] = ['BUG', 'FEATURE', 'QUALITY', 'IMPROVEMENT'];
+  statuses: any[] = ['OPEN', 'IN_PROGRESS', 'ABANDONED', 'CLOSED'];
 
   localLayout: FlexibleColumnLayout = 'OneColumnStartFullScreen';
   showMidColumnControls = this.localLayout.startsWith('Two') || this.localLayout.includes('FullScreen');
@@ -102,6 +107,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
 
   constructor(private taskService: TaskService,
     private issueService: IssueService,
+    private userService: UserService,
     private _dialogService: DialogService,
     private _fb: FormBuilder,
               private messageStripAlertService: MessageStripAlertService,
@@ -113,6 +119,10 @@ export class TaskListComponent implements OnInit, OnDestroy {
       this.productId = navigation.extras.state['productId'];
       this.requestId = navigation.extras.state['requestId'];
     }
+  userService.getUsersByRole("WORKER").subscribe((users: String[]) => {
+      this.workers = users;
+      this._cdr.detectChanges();
+    });
   }
 
   ngOnInit(): void  {

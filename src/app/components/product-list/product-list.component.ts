@@ -28,7 +28,7 @@ import {
   ListFooterDirective,
   ListItemComponent,
   ListTitleDirective, ScrollbarDirective,
-  TitleComponent, ToolbarComponent, ToolbarSpacerDirective
+  TitleComponent, ToolbarComponent, ToolbarSpacerDirective, ComboboxComponent
 } from "@fundamental-ngx/core";
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ProductInterface} from "../../models/product/product.interface";
@@ -42,6 +42,7 @@ import {debounceTime} from "rxjs";
 import {DatePipe} from "@angular/common";
 import {HoverDetailsComponent} from "../hover-details/hover-details.component";
 import {MessageStripAlertService} from "@fundamental-ngx/core/message-strip";
+import {UserService} from "../../services/user-services/user.service";
 
 @Component({
   selector: 'app-product-list',
@@ -76,7 +77,8 @@ import {MessageStripAlertService} from "@fundamental-ngx/core/message-strip";
     ScrollbarDirective,
     DatePipe,
     AvatarComponent,
-    HoverDetailsComponent
+    HoverDetailsComponent,
+    ComboboxComponent
   ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss'
@@ -89,8 +91,11 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy{
   myForm!: FormGroup;
   @ViewChild('overlay')
   overlay: ElementRef<HTMLElement> | undefined;
+  owners: String[] = [];
+
   constructor(private router: Router,
               private productService: ProductService,
+              private userService: UserService,
               private _fb: FormBuilder,
               private _cdr: ChangeDetectorRef,
               private messageStripAlertService: MessageStripAlertService,
@@ -109,6 +114,11 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy{
     this.webSocketService.updates$.subscribe(() => {
       debounceTime(500);
       this.fetchData();
+    });
+
+    this.userService.getUsersByRole("OWNER").subscribe((users: String[]) => {
+      this.owners = users;
+      this._cdr.detectChanges();
     });
   }
 

@@ -85,16 +85,6 @@
                         formControlName="descriptionInput"></textarea>
             </div>
             <div fd-form-item>
-              <label fd-form-label for="input-3">Type</label>
-              <input
-                fd-form-control
-                formControlName="typeInput"
-                type="text"
-                id="input-3"
-                autocomplete="off"
-              />
-            </div>
-            <div fd-form-item>
               <label fd-form-label for="input-4">Priority</label>
               <input
                 fd-form-control
@@ -105,13 +95,23 @@
               />
             </div>
             <div fd-form-item>
+              <label fd-form-label for="input-3">Type</label>
+              <fd-combobox
+                formControlName="typeInput"
+                type="text"
+                id="input-3"
+                [dropdownValues]="taskTypes"
+                placeholder="Select Type"
+              />
+            </div>
+            <div fd-form-item>
               <label fd-form-label for="input-5">Assignee</label>
-              <input
-                fd-form-control
+              <fd-combobox
                 formControlName="assigneeInput"
                 type="text"
                 id="input-5"
-                autocomplete="off"
+                [dropdownValues]="workers"
+                placeholder="Select Assignee"
               />
             </div>
           </div>
