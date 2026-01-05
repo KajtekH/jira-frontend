@@ -3,13 +3,14 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {IssueInterface} from "../../models/issue/issue.interface";
 import {IssueRequestInterface} from "../../models/issue/issueRequest.interface";
+import {HOST} from "../host.constant";
 
 @Injectable({
   providedIn: 'root'
 })
 export class IssueService {
 
-  private baseUrl = 'http://localhost:8080/api/issues';
+  private baseUrl = `${HOST}/issues`;
   constructor(private http: HttpClient) { }
 
   getIssues(requestId: number): Observable<IssueInterface[]> {

@@ -1,17 +1,13 @@
 import { Routes } from '@angular/router';
-import {IssueListComponent} from "./components/issue-list/issue-list.component";
-import {TaskListComponent} from "./components/task-list/task-list.component";
-import {RequestListComponent} from "./components/request-list/request-list.component";
-import {ProductListComponent} from "./components/product-list/product-list.component";
-import {LoginComponent} from "./components/login-component/login.component";
-import { UserListComponent } from './components/user-list/user-list.component';
 
+// Lazy loading standalone components zmniejsza initial bundle size
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  {path: 'login', component: LoginComponent},
-  { path: 'product-list', component: ProductListComponent },
-  { path: 'issue-list/:id', component: IssueListComponent },
-  { path: 'task-list/:id', component: TaskListComponent },
-  { path: 'request-list/:id', component: RequestListComponent },
-  {path: 'user-list', component: UserListComponent}
+  { path: 'login', loadComponent: () => import('./components/login-component/login.component').then(m => m.LoginComponent) },
+  { path: 'product-list', loadComponent: () => import('./components/product-list/product-list.component').then(m => m.ProductListComponent) },
+  { path: 'issue-list/:id', loadComponent: () => import('./components/issue-list/issue-list.component').then(m => m.IssueListComponent) },
+  { path: 'task-list/:id', loadComponent: () => import('./components/task-list/task-list.component').then(m => m.TaskListComponent) },
+  { path: 'request-list/:id', loadComponent: () => import('./components/request-list/request-list.component').then(m => m.RequestListComponent) },
+  { path: 'user-list', loadComponent: () => import('./components/user-list/user-list.component').then(m => m.UserListComponent) },
+  { path: '**', redirectTo: 'login' }
 ];

@@ -3,6 +3,8 @@ import {Inject, Injectable, InjectionToken} from '@angular/core';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { Subject } from 'rxjs';
+import {HOST} from "../host.constant";
+
 
 @Injectable({ providedIn: 'root' })
 export class WebSocketService {
@@ -18,7 +20,7 @@ export class WebSocketService {
 
   private initializeConnection() {
     this.stompClient = new Client({
-      webSocketFactory: () => new SockJS('http://localhost:8080/ws'),
+      webSocketFactory: () => new SockJS(`${HOST}/ws`),
       reconnectDelay: 5000,
       onConnect: () => this.subscribeToUpdates()
     });

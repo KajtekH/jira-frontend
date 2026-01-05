@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {LoginRequest} from "../../models/auth/login-request";
 import {interval, Observable, Subscription} from "rxjs";
 import {LoginResponse} from "../../models/auth/login-response";
+import {HOST} from "../host.constant";
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import {LoginResponse} from "../../models/auth/login-response";
 export class AuthService {
   private refreshSubscription: Subscription | undefined;
 
-  private baseUrl = 'http://localhost:8080/api/auth';
+  private baseUrl =`${HOST}/auth`;
 
   constructor(private http: HttpClient) { }
 

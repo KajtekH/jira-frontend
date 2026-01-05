@@ -5,6 +5,7 @@ import {TaskInterface} from "../../models/task/task.interface";
 import {TaskRequest} from "../../models/task/taskRequest.interface";
 import {MoveTaskRequest} from "../../models/task/moveTaskRequest.interface";
 import {TaskListResponse} from "../../models/task/task-list-response";
+import {HOST} from "../host.constant";
 
 
 @Injectable({
@@ -12,7 +13,7 @@ import {TaskListResponse} from "../../models/task/task-list-response";
 })
 export class TaskService {
 
-  private baseUrl = 'http://localhost:8080/api/tasks';
+  private baseUrl = `${HOST}/tasks`;
 
   constructor(private http: HttpClient) { }
 

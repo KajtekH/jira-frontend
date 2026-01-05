@@ -3,13 +3,14 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {RequestInterface} from "../../models/request/request.interface";
 import {RequestRequestInterface} from "../../models/request/requestRequest.interface";
+import {HOST} from "../host.constant";
 
 @Injectable({
   providedIn: 'root'
 })
 export class RequestService {
 
-  private baseUrl = 'http://localhost:8080/api/requests';
+  private baseUrl = `${HOST}/requests`;
 
   constructor(private http: HttpClient) { }
 
